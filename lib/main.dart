@@ -1,29 +1,37 @@
+import 'package:ehho/presentation/screens/activity/activity_detail_screen.dart';
+import 'package:ehho/presentation/screens/auth/login_screen.dart';
+import 'package:ehho/presentation/screens/history/history_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'demo', home: Home());
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({super.key});
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green[200],
-      appBar: AppBar(title: Text('Scaffold')),
-      body: Center(child: Text('Hello Scaffold')),
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: _router,
     );
   }
 }
+
+// GoRouter の設定
+final GoRouter _router = GoRouter(
+  initialLocation: "/login",
+  routes: [
+    GoRoute(path: "/login", builder: (context, state) => const LoginScreen()),
+    GoRoute(
+      path: "/activity",
+      builder: (context, state) => const ActivityScreen(),
+    ),
+    GoRoute(
+      path: "/history",
+      builder: (context, state) => const HistoryScreen(),
+    ),
+  ],
+);
