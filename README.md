@@ -1,9 +1,8 @@
 # ehho
 
 ## ディレクトリ構成
-```
-以下のプロジェクト構成をMVVMの構造に変更してほしい
 
+```
 .env                         # 環境変数ファイル（SupabaseのURLやAPIキーを格納）
 lib/
 │── main.dart                # エントリーポイント。dotenvを読み込み、runApp()でAppを起動
