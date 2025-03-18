@@ -2,54 +2,67 @@
 
 ## ディレクトリ構成
 ```
-.env                         # プロジェクトルートに配置する環境変数ファイル（例: SUPABASE_URL, SUPABASE_API_KEY など）
+.env                         # 環境変数ファイル（SupabaseのURLやAPIキーを格納）
 lib/
-│── main.dart                # エントリーポイント。dotenvを読み込み、runApp()でAppを起動する
-│── app.dart                 # MaterialAppやルーティング設定を管理するウィジェット
+│── main.dart                # エントリーポイント。dotenvを読み込み、runApp()でAppを起動
+│── app.dart                 # MaterialAppやルーティング設定を管理
 │
 ├── core/                    # アプリ全体で共通のロジックや設定
-│   ├── services/            # Supabase認証やデータ取得関連のサービス層
-│   │   ├── auth_service.dart      # ログイン・ログアウト・ユーザー登録の処理を管理
-│   │   ├── activity_service.dart  # アクティビティの記録のCRUD処理を管理
-│   │   ├── user_service.dart      # ユーザー情報の取得・更新処理を管理
-│   │
-│   ├── models/              # データモデルの定義
-│   │   ├── user.dart              # ユーザー情報（身長・体重・氏名・アクティビティID）をモデル化
-│   │   ├── activity.dart          # アクティビティ情報（id・日時・運動時間・運動種別・距離）をモデル化
-│   │
-│   ├── utils/               # アプリ共通の便利関数やバリデーション
+│   ├── utils/               # 共通のヘルパー関数
 │   │   ├── date_formatter.dart    # 日付や時間のフォーマット変換関数
-│   │   ├── validators.dart        # 入力フォームのバリデーション関数（例: 身長・体重の入力チェック）
+│   │   ├── validators.dart        # 入力フォームのバリデーション
 │   │
 │   ├── theme/               # アプリのデザイン関連
-│       ├── colors.dart            # カラーコードを定義（例: プライマリカラー、背景色）
+│       ├── colors.dart            # カラーコードの定義
 │       ├── typography.dart        # テキストスタイルの統一管理
 │
-├── features/                # 各機能ごとのUIとロジック
-│   ├── auth/                # 認証関連の画面
-│   │   ├── login_screen.dart      # ログイン画面のUIとロジック
-│   │   ├── register_screen.dart   # 新規登録画面のUIとロジック
-│   │
-│   ├── activity/            # アクティビティ画面
-│   │   ├── activity_screen.dart        # アクティビティの一覧表示画面
-│   │   ├── activity_detail_screen.dart # アクティビティ詳細画面
-│   │
-│   ├── history/             # 計測履歴画面
-│   │   ├── history_screen.dart   # 計測履歴一覧を表示する画面
+├── models/                  # データモデルの定義
+│   ├── user.dart              # ユーザー情報（身長・体重・氏名・アクティビティID）
+│   ├── activity.dart          # アクティビティ情報（id・日時・運動時間・運動種別・距離）
 │
-├── widgets/                 # 再利用可能なUIコンポーネント
-│   ├── custom_button.dart        # カスタムボタン（例: PrimaryButton, SecondaryButton）
-│   ├── activity_card.dart        # アクティビティ情報をカード表示するウィジェット
-│   ├── input_field.dart          # テキスト入力フィールド（例: 名前・身長・体重の入力）
+├── services/                 # データ取得・認証などのビジネスロジック
+│   ├── auth_service.dart        # ログイン・ログアウト・ユーザー登録の処理
+│   ├── activity_service.dart    # アクティビティのCRUD処理
+│   ├── user_service.dart        # ユーザー情報の取得・更新処理
 │
-└── config/                  # 設定ファイル関連
-    ├── supabase_config.dart       # SupabaseのURL・APIキーなどを管理（envから読み込む）
-    ├── routes.dart                # 画面遷移のルーティング定義（GoRouterやNavigatorを使用）
-    
+├── repositories/             # データリポジトリ層（APIやローカルデータアクセス）
+│   ├── user_repository.dart        # ユーザー情報の取得・更新
+│   ├── activity_repository.dart    # アクティビティのCRUD処理
+│   ├── supabase_client.dart        # SupabaseのAPIラッパー
+│
+├── viewmodels/               # MVVMのViewModel（状態管理）
+│   ├── auth_viewmodel.dart         # 認証の状態管理
+│   ├── activity_viewmodel.dart     # アクティビティの状態管理
+│   ├── user_viewmodel.dart         # ユーザー情報の状態管理
+│
+├── views/                    # UI（画面とコンポーネント）
+│   ├── auth/
+│   │   ├── login_screen.dart       # ログイン画面のUI
+│   │   ├── register_screen.dart    # 新規登録画面のUI
+│   │
+│   ├── activity/
+│   │   ├── activity_screen.dart       # アクティビティ一覧
+│   │   ├── activity_detail_screen.dart# アクティビティ詳細
+│   │
+│   ├── history/
+│   │   ├── history_screen.dart        # 計測履歴画面
+│
+│   ├── widgets/             # 再利用可能なUIコンポーネント
+│   │   ├── custom_button.dart      # 汎用的なカスタムボタン
+│   │   ├── activity_card.dart      # アクティビティ情報をカード表示するウィジェット
+│   │   ├── input_field.dart        # テキスト入力フィールド
+│
+└── config/                  # 設定ファイル
+    ├── supabase_config.dart        # Supabaseの設定（envから読み込む）
+    ├── routes.dart                 # ルーティング定義
+    ├── app_constants.dart           # アプリ内で共通利用する定数
+    ├── environment.dart             # 環境ごとの設定読み込み
+
 assets/                      # 画像・フォント・アイコンなどのアセット
 └── images/                  # 画像ファイルを格納
     ├── logo.png             # ロゴ画像
-    ├── running_icon.png     # ランニング用アイコン
+    ├── running_icon.png     # ランニングアイコン
     ├── background.jpg       # 背景画像
+
 ```
 
