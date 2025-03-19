@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -29,18 +29,6 @@ class HistoryScreen extends StatelessWidget {
                     },
                   );
                 },
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // ログイン処理を後で追加
-                  // 今はログインボタンを押すとアクティビティページに遷移する
-                  // go_router を使用してアクティビティ画面へ遷移
-                  context.go("/activity");
-                },
-                child: const Text("アクテビティページへ遷移"),
               ),
             ),
           ],
