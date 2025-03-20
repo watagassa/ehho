@@ -3,7 +3,6 @@ import 'package:ehho/presentation/screens/home/home_screen.dart';
 import 'package:ehho/presentation/widgets/activity/activity_detail_screen.dart';
 import 'package:ehho/presentation/screens/auth/login_screen.dart';
 import 'package:ehho/presentation/widgets/history/history_screen.dart';
-import 'package:ehho/presentation/widgets/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
