@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ehho/presentation/widgets/footer.dart'; // フッターをインポート
 
-class ActivityScreen extends ConsumerWidget {
+class ActivityScreen extends StatelessWidget {
   const ActivityScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(indexProvider);
-
-    // 画面リスト
-    final pages = [
-      const ActivityScreen(),
-      Container(), // 履歴画面（別途作成）
-    ];
-
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("アクティビティ"), centerTitle: true),
       body: Padding(
@@ -49,10 +39,14 @@ class ActivityScreen extends ConsumerWidget {
                 child: const Text("新しいアクティビティを開始"),
               ),
             ),
+            // 履歴ページへ遷移するボタン(仮置き)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  // ログイン処理を後で追加
+                  // 今はログインボタンを押すとアクティビティページに遷移する
+                  // go_router を使用してアクティビティ画面へ遷移
                   context.go("/history");
                 },
                 child: const Text("履歴ページへ遷移"),
@@ -60,9 +54,6 @@ class ActivityScreen extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavi(
-        onTap: (i) => ref.read(indexProvider.notifier).state = i, // 画面切り替え
       ),
     );
   }
