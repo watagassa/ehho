@@ -5,6 +5,10 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// dotenvをロード
+def dotenv = new Properties()
+file("../../.env").withInputStream { dotenv.load(it) }
+
 android {
     namespace = "com.example.ehho"
     compileSdk = flutter.compileSdkVersion
@@ -24,10 +28,11 @@ android {
         applicationId = "com.example.ehho"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 20 // Googleマップを使用するための最小SDK
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = dotenv["GOOGLE_MAP_API_KEY"] ?: ""
     }
 
     buildTypes {
