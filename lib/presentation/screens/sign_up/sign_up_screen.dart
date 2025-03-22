@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 // import 'signup_view_model.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('新規登録')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Column(
           children: [
             // TextField(
@@ -79,6 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //     SnackBar(content: Text('登録失敗')),
                 //   );
                 // }
+                context.go("/home");
               },
               child: Text('登録'),
             ),
