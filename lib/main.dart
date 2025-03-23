@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+
 void main() async {
   await dotenv.load(fileName: '.env'); // .envファイルの読み込み
   runApp(const ProviderScope(child: MyApp()));
