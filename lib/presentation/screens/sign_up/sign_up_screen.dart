@@ -84,18 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () async {
-                  // final success = await _viewModel.signUp();
-                  // if (success) {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text('登録成功！')),
-                  //   );
-                  //   // TODO: アクティビティ画面へ遷移
-                  // } else {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text('登録失敗')),
-                  //   );
-                  // }
+                onPressed: () {
+                  //home画面に移動
                   context.go("/home");
                 },
                 child: Text('登録'),
