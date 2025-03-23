@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/cupertino.dart';
 // import 'signup_view_model.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -11,30 +12,25 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   // final _viewModel = SignUpViewModel();
   bool isChecked = false; // valueプロパティに渡す変数
+  bool isToggle = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('新規登録')),
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(35.0, 20.0, 35.0, 20.0),
+
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TextField(
-            //   // controller: _viewModel.emailController,
-            //   decoration: InputDecoration(labelText: 'メールアドレス'),
-            // ),
-            // TextField(
-            //   // controller: _viewModel.passwordController,
-            //   decoration: InputDecoration(labelText: 'パスワード'),
-            //   obscureText: true,
-            // ),
-            Text("aaa"),
+            Text("1.ｴｯﾎｴｯﾎ 名前を登録しなくちゃ"),
             TextField(
               // controller: _viewModel.nameController,
               maxLength: 20,
               decoration: InputDecoration(labelText: '名前'),
             ),
-            Text("aaa"),
+            SizedBox(height: 20),
+            Text("2.ｴｯﾎｴｯﾎ 身長・体重を入力しなきゃ"),
             TextField(
               // controller: _viewModel.heightController,
               decoration: InputDecoration(labelText: '身長（cm）'),
@@ -51,7 +47,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d*)?')),
               ],
             ),
+            SizedBox(height: 20),
             // gpsの許可チェックボックス
+            Text("3.gpsの許可はする？"),
             Row(
               children: [
                 Checkbox(
@@ -65,24 +63,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Text("gpsの許可"),
               ],
             ),
+            SizedBox(height: 20),
+            // 通知の許可トグルスイッチ
+            Text("4.通知の許可はする？"),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                CupertinoSwitch(
+                  value: isToggle,
+                  onChanged: (value) {
+                    setState(() {
+                      isToggle = value;
+                    });
+                  },
+                ),
+                Text("通知の許可"),
+              ],
+            ),
 
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                // final success = await _viewModel.signUp();
-                // if (success) {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(content: Text('登録成功！')),
-                //   );
-                //   // TODO: アクティビティ画面へ遷移
-                // } else {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(content: Text('登録失敗')),
-                //   );
-                // }
-                context.go("/home");
-              },
-              child: Text('登録'),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  // final success = await _viewModel.signUp();
+                  // if (success) {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text('登録成功！')),
+                  //   );
+                  //   // TODO: アクティビティ画面へ遷移
+                  // } else {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text('登録失敗')),
+                  //   );
+                  // }
+                  context.go("/home");
+                },
+                child: Text('登録'),
+              ),
             ),
           ],
         ),
