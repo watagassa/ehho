@@ -47,10 +47,10 @@ class LoginScreen extends StatelessWidget {
                     // ログイン処理を後で追加
                     // 今はログインボタンを押すとアクティビティページに遷移する
                     // go_router を使用してhome画面へ遷移
-                    context.go("/home");
+                    context.go("/signIn");
                   },
 
-                  child: const Text("ログイン(homeへ遷移)"),
+                  child: const Text("ログイン(signInへ遷移)"),
                 ),
               ),
               const SizedBox(height: 20),
