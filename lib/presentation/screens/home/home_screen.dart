@@ -28,6 +28,31 @@ class HomeScreen extends ConsumerWidget {
       BottomNavigationBarItem(icon: Icon(Icons.history), label: '計測履歴'),
     ];
 
+    final header = AppBar(
+      leading: Padding(     //左側に画像読み込み
+        padding: EdgeInsets.all(1), // 左側の余白を追加
+        child: Image.asset(
+          'assets/images/ehho_nomal.png',
+          fit: BoxFit.contain,  //画像のサイズを調整
+        ),
+      ),
+      leadingWidth: 100,  //画像配置の幅広げてる
+      title: FittedBox(
+        child: Text(items[index].label ?? '', style: TextStyle(fontSize: 28)),
+      ),
+      centerTitle: true,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(7),
+          child: Image.asset('assets/images/default_user.png'),
+        ),
+      ],
+
+
+      backgroundColor: Colors.lightGreen,
+      toolbarHeight:80,
+    );
+
     // 下のバー
     final bar = BottomNavigationBar(
       items: items, // アイテムたち
@@ -44,6 +69,10 @@ class HomeScreen extends ConsumerWidget {
     // 画面たち
     final pages = [const ActivityScreen(), const HistoryScreen()];
 
-    return Scaffold(body: pages[index], bottomNavigationBar: bar);
+    return Scaffold(
+      appBar: header,
+      body: pages[index], 
+      bottomNavigationBar: bar
+    );
   }
 }
