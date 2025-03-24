@@ -112,6 +112,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Text('新規登録', style: TextStyle(fontSize: 20)),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  //home画面に移動
+                  context.go("/home");
+                },
+                style: ElevatedButton.styleFrom(
+                  // 幅200、高さは自動
+                  fixedSize: Size(800, 50),
+                  backgroundColor: Colors.amber[200],
+                  shadowColor: Colors.black,
+                ),
+                child: Text(
+                  '新規登録',
+                  style: TextStyle(
+                    fontSize: 20,
+                    backgroundColor: Color(0x00989898),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
