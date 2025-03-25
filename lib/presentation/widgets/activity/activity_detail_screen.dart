@@ -67,25 +67,20 @@ class ActivityScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
             SizedBox(
-              width: double.infinity,
+              width: 300,
               child: ElevatedButton(
                 onPressed: () {
                   // 新しいアクティビティ開始処理
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 238, 229, 153),
+                  foregroundColor: Colors.black54,
+                  padding: const EdgeInsets.all(5.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), 
+                  ),
+                ),
                 child: const Text("新しいアクティビティを開始"),
-              ),
-            ),
-            // 履歴ページへ遷移するボタン(仮置き)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // ログイン処理を後で追加
-                  // 今はログインボタンを押すとアクティビティページに遷移する
-                  // go_router を使用してアクティビティ画面へ遷移
-                  context.go("/home");
-                },
-                child: const Text("履歴ページへ遷移"),
               ),
             ),
 
