@@ -12,9 +12,10 @@ final loginServiceProvider = Provider<LoginService>((ref) {
 
 class LoginService {
   final Ref _ref;
+  // 最新のsupabaseクライアントを取得する
   SupabaseClient get _supabaseClient => _ref.read(supabaseClientProvider);
   
-  LoginService(this._ref);
+  LoginService(this._ref); // コンストラクタ
 
   // Android, IOS 用
   Future<void> googleLogin() async {
