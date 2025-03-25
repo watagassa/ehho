@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ehho/presentation/widgets/activity/dashboard.dart';
+import 'package:ehho/presentation/widgets/activity/activity_custombutton_group.dart';
 
 class ActivityScreen extends StatelessWidget {
   const ActivityScreen({super.key});
@@ -60,7 +61,10 @@ class ActivityScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
+            //モードカスタムボタン
+            const ModeButtonGroup(),
+
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
