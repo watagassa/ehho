@@ -37,7 +37,7 @@ class LoginScreen extends ConsumerWidget {
                       context.go("/home");
                     }
                   },
-                  child: const Text("ログイン"),
+                  child: const Text("Googleでログイン"),
                 ),
               ),
               const SizedBox(height: 20),
