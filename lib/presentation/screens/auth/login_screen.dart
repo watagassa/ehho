@@ -34,7 +34,7 @@ class LoginScreen extends ConsumerWidget {
                       throw ('Googleログインに失敗しました: $e');
                     }
                     if (context.mounted) { // ログイン処理が終わり次第signInに遷移
-                      context.go("/signIn");
+                      context.go("/home");
                     }
                   },
                   child: const Text("ログイン"),
