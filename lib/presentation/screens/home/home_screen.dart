@@ -25,7 +25,10 @@ class HomeScreen extends ConsumerWidget {
         label: 'アクティビティ',
       ),
 
-      BottomNavigationBarItem(icon: Icon(Icons.history), label: '計測履歴'),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.history), 
+        label: '計測履歴'
+      ),
     ];
 
     final header = AppBar(
@@ -38,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       leadingWidth: 100,  //画像配置の幅広げてる
       title: FittedBox(
-        child: Text(items[index].label ?? '', style: TextStyle(fontSize: 28)),
+        child: Text(items[index].label ?? '', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
       ),
       centerTitle: true,
       actions: [

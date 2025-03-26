@@ -13,10 +13,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // final _viewModel = SignUpViewModel();
   bool isChecked = false; // valueプロパティに渡す変数
   bool isToggle = false;
+
   @override
   Widget build(BuildContext context) {
+    final header = AppBar(
+      leading: Padding(
+        //左側に画像読み込み
+        padding: EdgeInsets.all(1), // 左側の余白を追加
+        child: Image.asset(
+          'assets/images/ehho_nomal.png',
+          fit: BoxFit.contain, //画像のサイズを調整
+        ),
+      ),
+      leadingWidth: 100, //画像配置の幅広げてる
+      title: FittedBox(
+        child: Text(
+          "ehho へようこそ！", 
+          style: TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      centerTitle: true,
+      backgroundColor: Colors.lightGreen,
+      toolbarHeight: 80,
+    );
     return Scaffold(
-      appBar: AppBar(title: Text('新規登録')),
+      appBar: header,
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(35.0, 20.0, 35.0, 20.0),
 
@@ -49,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             SizedBox(height: 20),
             // gpsの許可チェックボックス
-            Text("3.gpsの許可はする？"),
+            Text("3.GPSの許可はする？"),
             Row(
               children: [
                 Checkbox(
@@ -60,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                   },
                 ),
-                Text("gpsの許可"),
+                Text("GPSの許可"),
               ],
             ),
             SizedBox(height: 20),
@@ -82,13 +105,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
 
             SizedBox(height: 20),
-            Center(
+            SizedBox(
               child: ElevatedButton(
                 onPressed: () {
                   //home画面に移動
                   context.go("/home");
                 },
-                child: Text('登録'),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(800, 50),
+                  backgroundColor: Colors.amber[200],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  '新規登録',
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],

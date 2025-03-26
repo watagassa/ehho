@@ -43,6 +43,10 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(800, 50),
+                    backgroundColor: Colors.amber[200],
+                  ),
                   onPressed: () {
                     // ログイン処理を後で追加
                     // 今はログインボタンを押すとアクティビティページに遷移する
@@ -50,17 +54,33 @@ class LoginScreen extends StatelessWidget {
                     context.go("/signIn");
                   },
 
-                  child: const Text("ログイン(signInへ遷移)"),
+                  child: const Text("ログイン(signInへ遷移)",
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
 
               // 新規登録ボタン
               TextButton(
+                style: TextButton.styleFrom(
+                  fixedSize: Size(800, 50),
+                    backgroundColor: Colors.amber[200],
+                ),
                 onPressed: () {
                   // 新規登録画面へ遷移
                 },
-                child: const Text("新規登録はこちら"),
+                child: const Text("新規登録はこちら",
+                style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),

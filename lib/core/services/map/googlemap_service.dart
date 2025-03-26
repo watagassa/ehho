@@ -11,7 +11,7 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
-// マップビューの初期位置
+  // マップビューの初期位置
   CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0)); // 追加
   // マップの表示制御用
   late GoogleMapController mapController; // 追加
