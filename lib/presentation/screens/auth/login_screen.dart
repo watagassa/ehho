@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ehho/core/services/login/login_sevice.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -22,22 +20,37 @@ class LoginScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 40),
 
+              // メールアドレス入力
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "メールアドレス",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // パスワード入力
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "パスワード",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+
               // ログインボタン
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    final loginService = ref.read(loginServiceProvider);
-                    try {
-                      await loginService.googleLogin();
-                    } catch (e) {
-                      throw ('Googleログインに失敗しました: $e');
-                    }
-                    if (context.mounted) { // ログイン処理が終わり次第signInに遷移
-                      context.go("/home");
-                    }
+                  onPressed: () {
+                    // ログイン処理を後で追加
+                    // 今はログインボタンを押すとアクティビティページに遷移する
+                    // go_router を使用してhome画面へ遷移
+                    context.go("/signIn");
                   },
-                  child: const Text("Googleでログイン"),
+
+                  child: const Text("ログイン(signInへ遷移)"),
                 ),
               ),
               const SizedBox(height: 20),
