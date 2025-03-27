@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MileageBar extends StatelessWidget {
+class ExerciseMileageBar extends StatelessWidget {
   final double mileage; // 現在の距離
   final double maxMileage; // 最大距離
   final List<double> checkpoints; // 仕切り位置（km単位）
 
-  const MileageBar({
+  const ExerciseMileageBar({
     super.key,
     required this.mileage,
     required this.maxMileage,
@@ -28,7 +28,7 @@ class MileageBar extends StatelessWidget {
             return Stack(
               // clipBehavior: Clip.none, // 文字がはみ出ても表示
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: 50),
                 // 背景バー
                 Container(
                   height: 20,
