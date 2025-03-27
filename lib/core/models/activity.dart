@@ -35,7 +35,7 @@ class ActivityGet {
   int time;
   String day;
 
-  /// 下に配列用の初期化関数があるからこれは使わないで！！！！
+  /// 配列用の初期化関数があるからこれは使わないで！！！！
   ActivityGet(Map<String, dynamic> data)
     : activity_id = data['activity_id'] as int,
       user_id = data['user_id'] as String,
@@ -50,9 +50,8 @@ class ActivityGet {
   /// supabaseで取得した配列を、このクラスとしてそれぞれ初期化する。
   /// 
   /// コンストラクタは使わずこちらで初期化してください。
-  static List<ActivityGet> parseList(List<dynamic> listData) {
+  static List<ActivityGet> listInit(List<Map<String, dynamic>> listData) {
     return listData
-        .whereType<Map<String, dynamic>>()
         .map((data) => ActivityGet(data))
         .toList();
   }
