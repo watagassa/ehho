@@ -27,7 +27,7 @@ class ActivitySend {
 
 
 /// supabaseから受信したデータを管理するクラス
-class ActivityGet {
+class Activity {
   int activity_id;
   String user_id;
   int activity;
@@ -36,7 +36,7 @@ class ActivityGet {
   String day;
 
   /// 配列用の初期化関数があるからこれは使わないで！！！！
-  ActivityGet(Map<String, dynamic> data)
+  Activity(Map<String, dynamic> data)
     : activity_id = data['activity_id'] as int,
       user_id = data['user_id'] as String,
       activity = data['activity'] as int,
@@ -50,9 +50,9 @@ class ActivityGet {
   /// supabaseで取得した配列を、このクラスとしてそれぞれ初期化する。
   /// 
   /// コンストラクタは使わずこちらで初期化してください。
-  static List<ActivityGet> listInit(List<Map<String, dynamic>> listData) {
+  static List<Activity> listInit(List<Map<String, dynamic>> listData) {
     return listData
-        .map((data) => ActivityGet(data))
+        .map((data) => Activity(data))
         .toList();
   }
 

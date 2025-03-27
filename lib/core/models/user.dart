@@ -25,14 +25,14 @@ class UserSend {
 
 
 /// supabaseから受信したデータを管理するクラス
-class UserGet {
+class User {
   String user_id;
   String name;
   double height;
   double weight;
   List<bool> achieve;
 
-  UserGet(Map<String, dynamic> data)
+  User(Map<String, dynamic> data)
     : user_id = data['user_id'] as String,
       name = data['name'] as String,
       height = (data['height'] as num).toDouble(),
