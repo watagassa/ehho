@@ -5,49 +5,63 @@ class ActivityHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.separated(
-        itemCount: 5, // 仮データ数
-        separatorBuilder: (_, __) => const Divider(),
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Image.asset(
-              'assets/images/ehho_walking.png', // 画像パス
-              width: 40, // アイコンのサイズ調整
-              height: 40,
+    return SizedBox(
+      height: 300, // 最大高さを設定（調整可能）
+      child: Scrollbar(
+        // スクロールバー表示（オプション）
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 400, // スクロール可能な最大高さ
             ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${(index + 1) * 1.5}km",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+            child: ListView.separated(
+              shrinkWrap: true, // 内部でスクロールを管理
+              physics: const AlwaysScrollableScrollPhysics(), // 必ずスクロール可能にする
+              itemCount: 10, // 仮データ数
+              separatorBuilder: (_, __) => const Divider(),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Image.asset(
+                    'assets/images/ehho_walking.png',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.contain,
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "0.0km",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            "00:00:00",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      "${(index + 1).toString().padLeft(2, '0')}:34:56", // 仮の時間
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Icon(Icons.wb_sunny), // 現在の天気アイコン
-                    const Text("現在"),
-                  ],
-                ),
-              ],
+                      Column(
+                        children: [
+                          const Icon(Icons.wb_sunny),
+                          const Text("現在"),
+                        ],
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    // 詳細画面へ遷移（今は未実装）
+                  },
+                );
+              },
             ),
-            onTap: () {
-              // 詳細画面へ遷移（今は未実装）
-            },
-          );
-        },
+          ),
+        ),
       ),
     );
   }
