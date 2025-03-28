@@ -1,3 +1,4 @@
+import 'package:ehho/core/services/map/googlemap_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,6 +52,7 @@ class ActivityScreen extends StatelessWidget {
                 child: const Text("履歴ページへ遷移"),
               ),
             ),
+            SizedBox(height: 200, width: 800, child: MapView()),
           ],
         ),
       ),

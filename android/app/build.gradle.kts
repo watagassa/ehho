@@ -35,7 +35,17 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = dotenv.getProperty("GOOGLE_MAP_API_KEY", "")
+        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = System.getenv("GOOGLE_MAP_API_KEY") ?: ""
+
+    }
+    // 基本は初期設定を使うが、envに書いてあったらそっちのkeystore設定を使用
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(System.getenv("MY_KEYSTORE_PATH") ?: rootProject.file("debug.keystore"))
+            storePassword = System.getenv("MY_KEYSTORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("MY_KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("MY_KEY_PASSWORD") ?: "android"
+        }
     }
 
     buildTypes {
