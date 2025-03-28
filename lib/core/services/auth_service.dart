@@ -1,5 +1,4 @@
 // ログイン・ログアウト・ユーザー登録の処理
-// profile登録時の既に登録してるか否かの判定
 
 import 'package:ehho/config/supabase_config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +18,7 @@ class AuthService {
 
   /// ログイン中のユーザーが身長体重等の情報を登録したかどうか
   /// 
-  /// 登録画面での分岐に使う
+  /// ログイン後の画面遷移の分岐に使う
   Future<bool> isRegistered() async {
     try {
       final userId = _supabaseClient.auth.currentUser?.id;
@@ -43,4 +42,6 @@ class AuthService {
       throw ('ERROR $e');
     }
   }
+
+  
 }
