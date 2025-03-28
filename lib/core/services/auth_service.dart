@@ -52,7 +52,7 @@ class AuthService {
     required double height,
     required double weight,
   }) async {
-    String? user_id = _supabaseClient.auth.currentUser?.id;
+    final user_id = _supabaseClient.auth.currentUser?.id;
     if (user_id == null) {
       throw ('ユーザーを取得できませんでした。');
     }
