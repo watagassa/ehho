@@ -1,6 +1,7 @@
 // ログイン・ログアウト・ユーザー登録の処理
 
 import 'package:ehho/config/supabase_config.dart';
+import 'package:ehho/core/models/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,7 +18,7 @@ class AuthService {
   AuthService(this._ref); // コンストラクタ
 
   /// ログイン中のユーザーが身長体重等の情報を登録したかどうか
-  /// 
+  ///
   /// ログイン後の画面遷移の分岐に使う
   Future<bool> isRegistered() async {
     try {
@@ -39,9 +40,40 @@ class AuthService {
         return false;
       }
     } catch (e) {
-      throw ('ERROR $e');
+      throw ('エラー $e');
     }
   }
 
-  
+  /// ユーザー登録関数
+  ///
+  /// 名前、身長、体重　が必要
+  Future<void> registerUser({
+    required String name,
+    required double height,
+    required double weight,
+  }) async {
+    String? user_id = _supabaseClient.auth.currentUser?.id;
+    if (user_id == null) {
+      throw ('ユーザーを取得できませんでした。');
+    }
+
+    // 念のためユーザーが登録されてないときのみ送信するようにする
+    final userExist = await isRegistered();
+    if (!userExist) {
+      UserSend userData = UserSend(
+        user_id: user_id,
+        name: name,
+        height: height,
+        weight: weight,
+      );
+
+      final res = await _supabaseClient
+          .from('user_profiles')
+          .insert(userData.toObj());
+      
+      if(res.error != null) {
+        throw('username: $name のsupabaseへの登録に失敗しました。');
+      }
+    }
+  }
 }
