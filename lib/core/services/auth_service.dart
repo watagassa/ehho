@@ -5,7 +5,7 @@ import 'package:ehho/core/models/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// LoginSevice プロバイダー
+// AuthSevice プロバイダー
 final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService(ref);
 });
