@@ -2,6 +2,7 @@
 <!-- 地図で高度な位置情報を取得するための追加 -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <application
         android:label="ehho"
         android:name="${applicationName}"

@@ -1,3 +1,4 @@
+import 'package:ehho/core/services/map/googlemap_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ehho/presentation/widgets/activity/dashboard.dart';
@@ -83,8 +84,6 @@ class ActivityScreen extends StatelessWidget {
                 child: const Text("新しいアクティビティを開始"),
               ),
             ),
-
-
             // 残りのスペースを埋める
             const Expanded(child: SizedBox()),
           ],
