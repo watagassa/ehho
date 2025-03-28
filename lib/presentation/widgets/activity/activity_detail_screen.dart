@@ -20,48 +20,37 @@ class ActivityScreen extends StatelessWidget {
                 children: [
                   Text(
                     "00:00:00",
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
                   Text(
                     "運動時間",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ],
               ),
             ),
-          
+
             //距離、カロリー、ペース
             const MetricContainer(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // 距離
-                  MetricItem(
-                    value: "0.00",
-                    label: "距離 [km]",
-                  ),
-                  
+                  MetricItem(value: "0.00", label: "距離 [km]"),
+
                   // カロリー
-                  MetricItem(
-                    value: "0",
-                    label: "カロリー [kcal]",
-                  ),
-                  
+                  MetricItem(value: "0", label: "カロリー [kcal]"),
+
                   // 平均ペース
-                  MetricItem(
-                    value: "00:00",
-                    label: "平均ペース [min/km]",
-                  ),
+                  MetricItem(value: "00:00", label: "平均ペース [min/km]"),
                 ],
               ),
             ),
+
+            // GoogleMap
+            MapView(),
+            SizedBox(height: 10),
 
             //モードカスタムボタン
             const ModeButtonGroup(),
@@ -78,7 +67,7 @@ class ActivityScreen extends StatelessWidget {
                   foregroundColor: Colors.black54,
                   padding: const EdgeInsets.all(5.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), 
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: const Text("新しいアクティビティを開始"),
