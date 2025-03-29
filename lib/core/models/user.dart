@@ -21,18 +21,23 @@ class UserSend {
       "weight": weight,
     };
   }
+
+  @override
+  String toString() {
+    return '$user_id, $name, $height, $weight';    
+  }
 }
 
 
 /// supabaseから受信したデータを管理するクラス
-class User {
+class UserGet {
   String user_id;
   String name;
   double height;
   double weight;
   List<bool> achieve;
 
-  User(Map<String, dynamic> data)
+  UserGet(Map<String, dynamic> data)
     : user_id = data['user_id'] as String,
       name = data['name'] as String,
       height = (data['height'] as num).toDouble(),
@@ -44,4 +49,9 @@ class User {
   double get getHeight => height;
   double get getWeight => weight;
   List<bool> get getAchieve => achieve;
+
+  @override
+  String toString() {
+    return '$user_id, $name, $height, $weight, $achieve';
+  }
 }
