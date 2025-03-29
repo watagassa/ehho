@@ -37,10 +37,18 @@ class ActivityService {
         .from('user_activity')
         .insert(activityData.toObj());
 
-    if (res != null) {
-      throw ('Activityのsupabaseへの登録に失敗しました。');
-    }
+    if (res != null) throw ('Activityのsupabaseへの登録に失敗しました。');
   }
 
   /// アクティビティを削除する関数
+  /// 
+  /// activity_idを指定してください。
+  Future<void> deleteActivity({required activityId}) async {
+    final res = await _supabaseClient
+        .from('user_activity')
+        .delete()
+        .eq('activity_id', activityId);
+
+    if (res != null) throw ('アクティビティの削除に失敗しました。');
+  }
 }
