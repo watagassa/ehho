@@ -1,91 +1,101 @@
 import 'package:ehho/core/models/activity.dart';
-import 'package:ehho/core/models/testData.dart';
 import 'package:ehho/core/utils/generate_history.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // DateFormatを使用するためにインポート
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:ehho/core/services/activity_service.dart';
 
-// アクティビティのデータを格納するクラス
-class ActivityHistoryList extends StatelessWidget {
+class ActivityHistoryList extends ConsumerWidget {
   const ActivityHistoryList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<Activity> testActivitys = activityListTest;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activityService = ref.read(activityServiceProvider);
+
     return SizedBox(
-      height: 300, // 最大高さを設定（調整可能）
-      child: Scrollbar(
-        // スクロールバー表示（オプション）
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 400, // スクロール可能な最大高さ
-            ),
-            child: ListView.separated(
-              shrinkWrap: true, // 内部でスクロールを管理
-              physics: const AlwaysScrollableScrollPhysics(), // 必ずスクロール可能にする
-              separatorBuilder: (_, __) => const Divider(),
+      height: 300,
+      child: FutureBuilder<List<ActivityGet>>(
+        future: activityService.getActivity(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
+          }
+          final activities = snapshot.data ?? [];
+          if (activities.isEmpty) {
+            return const Center(child: Text('アクティビティがありません'));
+          }
 
-              itemCount: testActivitys.length, // データ数で管理
+          return Scrollbar(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemCount: activities.length,
+                  itemBuilder: (context, index) {
+                    final activity = activities[index];
+                    DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+                    DateTime formattedDateTime = dateFormat.parse(activity.day);
 
-              itemBuilder: (context, index) {
-                final activity = testActivitys[index]; // 日時をフォーマット
-                DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm');
-                DateTime formatteDateTime = dateFormat.parse(activity.day);
-                // 時間帯による条件分岐
+                    IconData icon;
+                    if (formattedDateTime.hour >= 6 &&
+                        formattedDateTime.hour < 9) {
+                      icon = Icons.wb_sunny;
+                    } else if (formattedDateTime.hour >= 9 &&
+                        formattedDateTime.hour < 18) {
+                      icon = Icons.access_time;
+                    } else {
+                      icon = Icons.nights_stay;
+                    }
 
-                IconData icon;
-                if (formatteDateTime.hour >= 6 && formatteDateTime.hour < 9) {
-                  // 朝
-                  icon = Icons.wb_sunny;
-                } else if (formatteDateTime.hour >= 9 &&
-                    formatteDateTime.hour < 18) {
-                  // 昼
-                  icon = Icons.access_time;
-                } else {
-                  // 夜
-                  icon = Icons.nights_stay;
-                }
+                    String imagePath = generateImagePath(activity.activity);
 
-                String imagePath = generateImagePath(activity.activity);
-
-                return ListTile(
-                  leading: Image.asset(
-                    imagePath, // 各アクティビティの画像を表示
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.contain,
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    return ListTile(
+                      leading: Image.asset(
+                        imagePath,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.contain,
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            activity.distance.toString(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                activity.distance.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                formatDuration(activity.time),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            // 秒を、時分秒に変換
-                            formatDuration(activity.time),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          Column(children: [Icon(icon), Text(activity.day)]),
                         ],
                       ),
-                      Column(children: [Icon(icon), Text(activity.day)]),
-                    ],
-                  ),
-                  onTap: () {
-                    // 詳細画面へ遷移（今は未実装）
+                      onTap: () {
+                        // 詳細画面へ遷移（未実装）
+                      },
+                    );
                   },
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

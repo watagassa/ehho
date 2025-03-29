@@ -27,6 +27,6 @@ List<Map<String, dynamic>> listData = [
   },
 ];
 
-List<Activity> activityListTest = Activity.listInit(
+List<ActivityGet> activityListTest = ActivityGet.listInit(
   listData,
 ); // listInitで複数のActivityを作成
