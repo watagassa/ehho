@@ -33,23 +33,27 @@ class ActivityService {
       time: time,
     );
 
-    final res = await _supabaseClient
-        .from('user_activity')
-        .insert(activityData.toObj());
-
-    if (res != null) throw ('Activityのsupabaseへの登録に失敗しました。');
+    try {
+      final _ = await _supabaseClient
+          .from('user_activity')
+          .insert(activityData.toObj());
+    } catch (e) {
+      throw ('アクティビティを登録中にエラーが発生しました。$e');
+    }
   }
 
   /// アクティビティを削除する関数
   ///
   /// activity_idを指定してください。
   Future<void> deleteActivity({required activityId}) async {
-    final res = await _supabaseClient
-        .from('user_activity')
-        .delete()
-        .eq('activity_id', activityId);
-    
-    if (res != null) throw ('アクティビティの削除に失敗しました。');
+    try {
+      final _ = await _supabaseClient
+          .from('user_activity')
+          .delete()
+          .eq('activity_id', activityId);
+    } catch (e) {
+      throw ('アクティビティ削除中にエラーが発生しました。$e');
+    }
   }
 
   /// アクティビティリストを取得する関数
@@ -57,11 +61,14 @@ class ActivityService {
     final userId = _supabaseClient.auth.currentUser?.id;
     if (userId == null) throw ('ユーザーを取得できませんでした。');
 
-    final data = await _supabaseClient
-        .from('user_activity')
-        .select()
-        .eq('user_id', userId);
-    
-    return ActivityGet.listInit(data);
+    try {
+      final data = await _supabaseClient
+          .from('user_activity')
+          .select()
+          .eq('user_id', userId);
+      return ActivityGet.listInit(data);
+    } catch (e) {
+      throw ('アクティビティリスト取得中にエラーが発生しました。$e');
+    }
   }
 }

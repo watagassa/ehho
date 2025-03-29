@@ -20,32 +20,30 @@ class UserService {
   UserService(this._ref); // コンストラクタ
 
   /// ユーザー情報を取得する
-  /// 
-  /// 取得できなかった場合はnullを返す
   Future<UserGet?> getUserProfile() async {
     final userId = _supabaseClient.auth.currentUser?.id;
+    if (userId == null) throw ('ユーザーを取得できませんでした。');
 
-    if (userId != null) {
+    try {
       final data = await _supabaseClient
           .from('user_profiles')
           .select()
           .eq('user_id', userId);
-
       // achieveがList<dynamic>になっているのでList<bool>にキャストする
       data[0]['achieve'] = List<bool>.from(data[0]['achieve']);
-      
+
       return UserGet(data[0]);
-    } else {
-      return null;
+    } catch (e) {
+      throw ('ユーザー情報取得中にエラーが発生しました。$e');
     }
   }
 
   /// ユーザーアイコンを取得する関数
-  /// 
+  ///
   /// 取得できなかった場合はデフォルトアイコンを返す
   String getUserIconURL() {
     final url = _supabaseClient.auth.currentUser?.userMetadata?['avatar_url'];
-    if(url != null) return url;
+    if (url != null) return url;
     return 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
   }
 }

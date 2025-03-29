@@ -23,7 +23,7 @@ class AuthService {
   Future<bool> isRegistered() async {
     try {
       final userId = _supabaseClient.auth.currentUser?.id;
-      if (userId == null) return false;
+      if (userId == null) throw ('ユーザーを取得できませんでした。');
 
       final data =
           await _supabaseClient
@@ -39,7 +39,7 @@ class AuthService {
         return false;
       }
     } catch (e) {
-      throw ('エラー $e');
+      throw ('ユーザー情報登録有無判定中にエラーが発生しました。$e');
     }
   }
 
@@ -64,12 +64,12 @@ class AuthService {
         weight: weight,
       );
 
-      final res = await _supabaseClient
-          .from('user_profiles')
-          .insert(userData.toObj());
-      
-      if(res != null) {
-        throw('username: $name のsupabaseへの登録に失敗しました。');
+      try {
+        final _ = await _supabaseClient
+            .from('user_profiles')
+            .insert(userData.toObj());
+      } catch (e) {
+        throw ('ユーザー:$name の登録中にエラーが発生しました。$e');
       }
     }
   }
