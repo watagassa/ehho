@@ -39,4 +39,13 @@ class UserService {
       return null;
     }
   }
+
+  /// ユーザーアイコンを取得する関数
+  /// 
+  /// 取得できなかった場合はデフォルトアイコンを返す
+  String getUserIconURL() {
+    final url = _supabaseClient.auth.currentUser?.userMetadata?['avatar_url'];
+    if(url != null) return url;
+    return 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
+  }
 }
