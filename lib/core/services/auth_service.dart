@@ -23,9 +23,8 @@ class AuthService {
   Future<bool> isRegistered() async {
     try {
       final userId = _supabaseClient.auth.currentUser?.id;
-      if (userId == null) {
-        return false;
-      }
+      if (userId == null) return false;
+
       final data =
           await _supabaseClient
               .from('user_profiles')
@@ -52,16 +51,14 @@ class AuthService {
     required double height,
     required double weight,
   }) async {
-    final user_id = _supabaseClient.auth.currentUser?.id;
-    if (user_id == null) {
-      throw ('ユーザーを取得できませんでした。');
-    }
+    final userId = _supabaseClient.auth.currentUser?.id;
+    if (userId == null) throw ('ユーザーを取得できませんでした。');
 
     // 念のためユーザーが登録されてないときのみ送信するようにする
     final userExist = await isRegistered();
     if (!userExist) {
       UserSend userData = UserSend(
-        user_id: user_id,
+        user_id: userId,
         name: name,
         height: height,
         weight: weight,
@@ -71,7 +68,7 @@ class AuthService {
           .from('user_profiles')
           .insert(userData.toObj());
       
-      if(res.error != null) {
+      if(res != null) {
         throw('username: $name のsupabaseへの登録に失敗しました。');
       }
     }
