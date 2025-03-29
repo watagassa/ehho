@@ -58,6 +58,10 @@ class MetricItem extends StatelessWidget {
       ),
     );
   }
+<<<<<<< HEAD
 }
 
 
+=======
+}
+>>>>>>> Uchida_map_02

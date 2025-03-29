@@ -1,3 +1,4 @@
+
 import 'package:ehho/presentation/screens/auth/login_screen.dart';
 import 'package:ehho/presentation/screens/sign_up/sign_up_screen.dart';
 import 'package:ehho/presentation/screens/home/home_screen.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 非同期処理のために初期化
