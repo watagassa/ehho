@@ -23,6 +23,11 @@ class ActivitySend {
       "time": time,
     };
   }
+
+  @override
+  String toString() {
+    return '$user_id, $activity, $distance, $time';
+  }
 }
 
 

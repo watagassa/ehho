@@ -21,6 +21,11 @@ class UserSend {
       "weight": weight,
     };
   }
+
+  @override
+  String toString() {
+    return '$user_id, $name, $height, $weight';    
+  }
 }
 
 
