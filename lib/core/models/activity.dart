@@ -62,4 +62,9 @@ class ActivityGet {
   double get getDistance => distance;
   int get getTime => time;
   String get getDay => day;
+
+  @override
+  String toString() {
+    return '$activity_id, $user_id, $activity, $distance, $time, $day';
+  }
 }

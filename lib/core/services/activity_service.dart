@@ -41,14 +41,27 @@ class ActivityService {
   }
 
   /// アクティビティを削除する関数
-  /// 
+  ///
   /// activity_idを指定してください。
   Future<void> deleteActivity({required activityId}) async {
     final res = await _supabaseClient
         .from('user_activity')
         .delete()
         .eq('activity_id', activityId);
-
+    
     if (res != null) throw ('アクティビティの削除に失敗しました。');
+  }
+
+  /// アクティビティリストを取得する関数
+  Future<List<ActivityGet>> getActivity() async {
+    final userId = _supabaseClient.auth.currentUser?.id;
+    if (userId == null) throw ('ユーザーを取得できませんでした。');
+
+    final data = await _supabaseClient
+        .from('user_activity')
+        .select()
+        .eq('user_id', userId);
+    
+    return ActivityGet.listInit(data);
   }
 }
