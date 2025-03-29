@@ -43,9 +43,8 @@ class LoginScreen extends ConsumerWidget {
             width: 300,
               child: ElevatedButton(
                 onPressed: () async {
-                  final loginService = ref.read(loginServiceProvider);
                   try {
-                    await loginService.googleLogin();
+                    await ref.read(loginServiceProvider).googleLogin();
                   } catch (e) {
                     throw ('Googleログインに失敗しました: $e');
                   }

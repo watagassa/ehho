@@ -23,11 +23,16 @@ class ActivitySend {
       "time": time,
     };
   }
+
+  @override
+  String toString() {
+    return '$user_id, $activity, $distance, $time';
+  }
 }
 
 
 /// supabaseから受信したデータを管理するクラス
-class Activity {
+class ActivityGet {
   int activity_id;
   String user_id;
   int activity;
@@ -36,7 +41,7 @@ class Activity {
   String day;
 
   /// 配列用の初期化関数があるからこれは使わないで！！！！
-  Activity(Map<String, dynamic> data)
+  ActivityGet(Map<String, dynamic> data)
     : activity_id = data['activity_id'] as int,
       user_id = data['user_id'] as String,
       activity = data['activity'] as int,
@@ -50,9 +55,9 @@ class Activity {
   /// supabaseで取得した配列を、このクラスとしてそれぞれ初期化する。
   /// 
   /// コンストラクタは使わずこちらで初期化してください。
-  static List<Activity> listInit(List<Map<String, dynamic>> listData) {
+  static List<ActivityGet> listInit(List<Map<String, dynamic>> listData) {
     return listData
-        .map((data) => Activity(data))
+        .map((data) => ActivityGet(data))
         .toList();
   }
 
@@ -62,4 +67,9 @@ class Activity {
   double get getDistance => distance;
   int get getTime => time;
   String get getDay => day;
+
+  @override
+  String toString() {
+    return '$activity_id, $user_id, $activity, $distance, $time, $day';
+  }
 }
