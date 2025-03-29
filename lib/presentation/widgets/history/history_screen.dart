@@ -2,10 +2,11 @@ import 'package:ehho/presentation/widgets/history/achievement_card.dart';
 import 'package:ehho/presentation/widgets/history/activity_history_list.dart';
 import 'package:ehho/presentation/widgets/history/exercise_mileage_bar.dart';
 import 'package:flutter/material.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:ehho/core/models/activity.dart' as core;
 
 class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+  final List<core.Activity> activities;
+  const HistoryScreen({super.key, required this.activities});
 
   @override
   Widget build(BuildContext context) {
