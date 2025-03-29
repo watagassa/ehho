@@ -35,7 +35,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = dotenv.getProperty("GOOGLE_MAP_API_KEY", "")
+        manifestPlaceholders["GOOGLE_MAP_API_KEY"] = System.getenv("GOOGLE_MAP_API_KEY") ?: ""
 
     }
     // 基本は初期設定を使うが、envに書いてあったらそっちのkeystore設定を使用
