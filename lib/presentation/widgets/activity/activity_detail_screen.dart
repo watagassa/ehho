@@ -1,7 +1,8 @@
 import 'package:ehho/core/services/map/googlemap_service.dart';
-import 'package:ehho/core/services/map/googlemap_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ehho/presentation/widgets/activity/dashboard.dart';
+import 'package:ehho/presentation/widgets/activity/activity_custombutton_group.dart';
 
 class ActivityScreen extends StatelessWidget {
   const ActivityScreen({super.key});
@@ -13,23 +14,47 @@ class ActivityScreen extends StatelessWidget {
         padding: const EdgeInsets.only(top: 10),
         child: Column(
           children: [
-            Expanded(
-              child: ListView.separated(
-                itemCount: 5, // 仮のデータ数
-                separatorBuilder: (_, __) => const Divider(),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: const Icon(Icons.directions_run),
-                    title: Text("ランニング ${index + 1}"),
-                    subtitle: Text("距離: ${(index + 1) * 2} km"),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // クリック時の動作（今はなし）
-                    },
-                  );
-                },
+            //運動時間
+            const MetricContainer(
+              child: Column(
+                children: [
+                  Text(
+                    "00:00:00",
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "運動時間",
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                ],
               ),
             ),
+
+            //距離、カロリー、ペース
+            const MetricContainer(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // 距離
+                  MetricItem(value: "0.00", label: "距離 [km]"),
+
+                  // カロリー
+                  MetricItem(value: "0", label: "カロリー [kcal]"),
+
+                  // 平均ペース
+                  MetricItem(value: "00:00", label: "平均ペース [min/km]"),
+                ],
+              ),
+            ),
+
+            // GoogleMap
+            MapView(),
+            SizedBox(height: 10),
+
+            //モードカスタムボタン
+            const ModeButtonGroup(),
+
             const SizedBox(height: 20),
             SizedBox(
               width: 300,
@@ -48,19 +73,8 @@ class ActivityScreen extends StatelessWidget {
                 child: const Text("新しいアクティビティを開始"),
               ),
             ),
-            // 履歴ページへ遷移するボタン(仮置き)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // ログイン処理を後で追加
-                  // 今はログインボタンを押すとアクティビティページに遷移する
-                  // go_router を使用してアクティビティ画面へ遷移
-                  context.go("/history");
-                },
-                child: const Text("履歴ページへ遷移"),
-              ),
-            ),
+            // 残りのスペースを埋める
+            const Expanded(child: SizedBox()),
           ],
         ),
       ),

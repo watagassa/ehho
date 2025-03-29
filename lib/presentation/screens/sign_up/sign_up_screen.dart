@@ -26,18 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       leadingWidth: 100, //画像配置の幅広げてる
-<<<<<<< HEAD
       title: FittedBox(child: Text("新規登録", style: TextStyle(fontSize: 28))),
-=======
-      title: FittedBox(
-        child: Text(
-          "ehho へようこそ！", 
-          style: TextStyle(
-            fontSize: 28, fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
->>>>>>> Uchida_map_02
       centerTitle: true,
       backgroundColor: Colors.lightGreen,
       toolbarHeight: 80,
@@ -76,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             SizedBox(height: 20),
             // gpsの許可チェックボックス
-            Text("3.GPSの許可はする？"),
+            Text("3.gpsの許可はする？"),
             Row(
               children: [
                 Checkbox(
@@ -87,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                   },
                 ),
-                Text("GPSの許可"),
+                Text("gpsの許可"),
               ],
             ),
             SizedBox(height: 20),
