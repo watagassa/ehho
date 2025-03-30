@@ -1,9 +1,12 @@
-import 'package:ehho/core/services/activity_service.dart';
+import 'package:ehho/core/services/activity_service.dart'; // パスは実際のプロジェクトに合わせてください
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final totalDistance = FutureProvider<int>(
-  (ref) async => ref.watch(activityServiceProvider).getDistanceTotal(),
+final totalDistanceProvider = FutureProvider<int>(
+  (ref) async {
+    final activityService = ref.watch(activityServiceProvider);
+    return await activityService.getDistanceTotal();
+  },
 );
 
 class ExerciseTotal extends ConsumerWidget {
@@ -11,7 +14,8 @@ class ExerciseTotal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final watcher = ref.watch(totalDistance);
+
+    final asyncTotalDistance = ref.watch(totalDistanceProvider);
 
     const TextStyle labelStyle = TextStyle(fontSize: 20, color: Colors.black);
     const TextStyle distanceStyle = TextStyle(
@@ -35,8 +39,8 @@ class ExerciseTotal extends ConsumerWidget {
             children: [
               Container(
                 width: 270,
-                decoration: BoxDecoration(
-                  border: const Border(
+                decoration: const BoxDecoration( 
+                  border: Border(
                     bottom: BorderSide(
                       color: Color.fromARGB(50, 0, 0, 0),
                       width: 1,
@@ -45,53 +49,48 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline, 
+                  textBaseline: TextBaseline.alphabetic,       
                   children: [
-                    Text('累計', style: labelStyle),
-                    switch (watcher) {
-                      AsyncLoading() => SizedBox(
-                        width: 220,
+                    const Text('累計', style: labelStyle), 
+                    const Spacer(), 
+                    switch (asyncTotalDistance) {
+                      AsyncLoading() => const SizedBox(
                         child: Text(
                           'Loading...',
                           style: distanceStyle,
                           textAlign: TextAlign.right,
                         ),
                       ),
-                      AsyncError() => SizedBox(
-                        width: 220,
+                      AsyncError(:final error) => SizedBox( 
+                        child: Tooltip( 
+                          message: error.toString(),
+                          child: Text(
+                            '読み込めませんでした...', 
+                            style: distanceStyle.copyWith(color: Colors.red), 
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ),
+                      AsyncData(:final value) => SizedBox(
                         child: Text(
-                          '読み込めませんでした。',
+                          '$value km', 
                           style: distanceStyle,
                           textAlign: TextAlign.right,
                         ),
                       ),
-                      AsyncValue<int>() => SizedBox(
-                        width: 220,
-                        child: Text(
-                          '$totalDistance km',
-                          style: distanceStyle,
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
+                       _ => const SizedBox.shrink(), 
                     },
-                    SizedBox(
-                      width: 220,
-                      child: Text(
-                        '$totalDistance km',
-                        style: distanceStyle,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
+              const Text(
                 '愛知県から京都府\nくらいの距離 !',
                 style: comparisonStyle,
                 textAlign: TextAlign.left,
