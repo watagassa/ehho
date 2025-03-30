@@ -18,17 +18,33 @@ class _ActivityScreenState extends State<ActivityScreen> {
   double _distance = 0.1; // 初期値 (km)
   int selectedMode = 0; // 0:ランニング, 1:ウォーキング, 2:サイクリング
   static const double weight = 60.0; // 仮の体重 (60kg)
+  bool _isRunning = false; // 活動中かどうかを管理
 
   // メッツの値
   final List<double> mets = [9.0, 3.5, 6.0];
 
-  void _startActivity() {
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //スタートストップ
+  void _toggleActivity() {
+    if (_isRunning) {
+      // 停止する場合
+      _timer?.cancel();
+    } else {
+      // **開始する前にリセット**
       setState(() {
-        _seconds++;
-        _distance += 0.01; // 1秒ごとに0.01km加算（仮の値）
+        _seconds = 0;
+        _distance = 0.0;
       });
+
+      // タイマー開始
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _seconds++;
+          _distance += 0.01; // 1秒ごとに0.01km加算（仮の値）
+        });
+      });
+    }
+    setState(() {
+      _isRunning = !_isRunning;
     });
   }
 
@@ -44,6 +60,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
     int minutes = pace.floor();
     int seconds = ((pace - minutes) * 60).floor();
     return "$minutes:${seconds.toString().padLeft(2, '0')}";
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // 画面を離れるときにタイマーを止める
+    super.dispose();
   }
 
   @override
@@ -94,14 +116,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
             SizedBox(
               width: 300,
               child: ElevatedButton(
-                onPressed: _startActivity,
+                onPressed: _toggleActivity,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 238, 229, 153),
+                  backgroundColor: _isRunning
+                      ? Color.fromARGB(255, 200, 110, 100) // ストップ時は赤
+                      : const Color.fromARGB(255, 238, 229, 153), // 開始時は黄色
                   foregroundColor: Colors.black54,
                   padding: const EdgeInsets.all(5.0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text("新しいアクティビティを開始"),
+                child: Text(_isRunning ? "ストップ" : "新しいアクティビティを開始"),
               ),
             ),
 
