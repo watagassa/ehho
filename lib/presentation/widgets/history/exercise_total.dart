@@ -2,11 +2,6 @@ import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// FutureProvider は削除 (または activityServiceProvider が Provider であることを想定)
-// activityServiceProvider が Provider<ActivityService> であると仮定します
-// final activityServiceProvider = Provider<ActivityService>((ref) => ActivityService());
-
-
 class ExerciseTotal extends ConsumerWidget {
   const ExerciseTotal({super.key});
 
@@ -133,7 +128,7 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
               ] else if (value < 100) ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\n運動しなきゃ',
+                  'ｴｯﾎｴｯﾎ\n今日も運動しなきゃ',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -143,9 +138,21 @@ class ExerciseTotal extends ConsumerWidget {
                   height: 75,
                   fit: BoxFit.contain,
                 ),
-              ] else ...[
+              ] else if (value < 500) ...[
                 const Text(
                   'ｴｯﾎｴｯﾎ\n渡り鳥にも負けない',
+                  style: comparisonStyle,
+                  textAlign: TextAlign.left,
+                ),
+                Image.asset(
+                  "assets/images/ehho_earth.png",
+                  width: 75,
+                  height: 75,
+                  fit: BoxFit.contain,
+                ),
+              ] else ...[
+                const Text(
+                  'ｴｯﾎｴｯﾎ\nまだ見ぬ場所へ',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
