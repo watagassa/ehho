@@ -72,4 +72,13 @@ class ActivityService {
       throw ('アクティビティリスト取得中にエラーが発生しました。$e');
     }
   }
+
+  Future<int> getDistanceTotal() async {
+    int total = 0;
+    final actList = await getActivity();
+    for(var act in actList) {
+      total += act.getDistance.toInt();
+    }
+    return (total / 1000).toInt();
+  }
 }
