@@ -1,6 +1,6 @@
 import 'package:ehho/presentation/widgets/history/achievement_card.dart';
 import 'package:ehho/presentation/widgets/history/activity_history_list.dart';
-import 'package:ehho/presentation/widgets/history/exercise_mileage_bar.dart';
+import 'package:ehho/presentation/widgets/history/exercise_total.dart';
 import 'package:flutter/material.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class HistoryScreen extends StatelessWidget {
               ActivityHistoryList(),
               SizedBox(height: 20),
               AppBar(leading: Icon(Icons.trending_up), title: Text("運動量")),
-              ExerciseMileageBar(mileage: 5, maxMileage: 10),
+              ExerciseTotal(),
               SizedBox(height: 20),
               AppBar(leading: Icon(Icons.archive), title: Text("実績")),
               AchievementRow(),
