@@ -191,21 +191,21 @@ class _MapViewState extends ConsumerState<MapView> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 50.0,
-              left: 20.0,
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                color: Colors.white.withOpacity(0.7),
-                child: Text(
-                  '移動距離: ${ref.watch(totalDistanceProvider)} m',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 50.0,
+            //   left: 20.0,
+            //   child: Container(
+            //     padding: const EdgeInsets.all(10.0),
+            //     color: Colors.white.withOpacity(0.7),
+            //     child: Text(
+            //       '移動距離: ${ref.watch(totalDistanceProvider)} m',
+            //       style: const TextStyle(
+            //         fontSize: 18,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

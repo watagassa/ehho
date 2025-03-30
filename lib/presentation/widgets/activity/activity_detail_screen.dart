@@ -104,7 +104,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   double _calculateCalories() {
     double metsValue = mets[selectedMode];
     double hours = _seconds / 3600;
-    return metsValue * weight / mets[0] * 1.05;
+    return metsValue * weight / mets[0] * 1.05 * _distance / 1000;
   }
 
   String _calculatePace() {
