@@ -8,6 +8,7 @@ import 'package:ehho/presentation/widgets/activity/activity_custombutton_group.d
 import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ehho/provider/providers.dart';
 
 class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
@@ -19,14 +20,12 @@ class ActivityScreen extends ConsumerStatefulWidget {
 class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   Timer? _timer;
   int _seconds = 0;
-  double _distance = 0.1; // 初期値 (km)
+  double _distance = 0.0; // 初期値 (km)
   int selectedMode = 0; // 0:ランニング, 1:ウォーキング, 2:サイクリング
   static const double weight = 60.0; // 仮の体重 (60kg)
   bool _isRunning = false; // 活動中かどうかを管理
-
   // メッツの値
   final List<double> mets = [9.0, 3.5, 6.0];
-
   // 初期地点の場所
   // 仮の初期値でPositionを作成
   Position startPos = Position(
@@ -41,7 +40,19 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
     speedAccuracy: 0.0,
     timestamp: DateTime.now(),
   );
-  //スタートストップ
+
+  // 画面が再ビルドされるたびにdistanceを更新
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final distance = ref.watch(
+      totalDistanceProvider,
+    ); // Providerから最新のdistanceを取得
+    setState(() {
+      _distance = distance; // _distanceを更新
+    });
+  }
+
   void _toggleActivity() async {
     if (_isRunning) {
       // 停止する場合
@@ -76,7 +87,12 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
           _seconds++;
-          _distance += 0.01; // 1秒ごとに0.01km加算（仮の値）
+        });
+        final distance = ref.watch(
+          totalDistanceProvider,
+        ); // Providerから最新のdistanceを取得
+        setState(() {
+          _distance = distance; // _distanceを更新
         });
       });
     }
@@ -88,7 +104,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   double _calculateCalories() {
     double metsValue = mets[selectedMode];
     double hours = _seconds / 3600;
-    return metsValue * weight * hours * 1.05;
+    return metsValue * weight / mets[0] * 1.05;
   }
 
   String _calculatePace() {
@@ -140,7 +156,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MetricItem(
-                      value: _distance.toStringAsFixed(2),
+                      value: (_distance / 1000).toStringAsFixed(2),
                       label: "距離 [km]",
                     ),
                     MetricItem(
@@ -156,7 +172,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               ),
 
               // GoogleMapの表示を_isRunningがtrueのときのみ
-              if (_isRunning) MapView(isRunning: _isRunning),
+              if (_isRunning)
+                MapView(startPos: startPos, isRunning: _isRunning),
               SizedBox(height: 10),
 
               // モードカスタムボタン
@@ -172,7 +189,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: _toggleActivity,
+                  onPressed: () {
+                    _toggleActivity();
+                    ref.read(totalDistanceProvider.notifier).state = 0.0;
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         _isRunning

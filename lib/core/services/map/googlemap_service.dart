@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ehho/provider/providers.dart';
 
-class MapView extends StatefulWidget {
+class MapView extends ConsumerStatefulWidget {
   final bool isRunning;
-  const MapView({super.key, required this.isRunning});
+  final Position startPos;
+  const MapView({super.key, required this.isRunning, required this.startPos});
 
   @override
   _MapViewState createState() => _MapViewState();
 }
 
-class _MapViewState extends State<MapView> {
+class _MapViewState extends ConsumerState<MapView> {
   // マップビューの初期位置
-  CameraPosition _initialLocation = const CameraPosition(
-    target: LatLng(0.0, 0.0),
-  );
+  late CameraPosition _initialLocation;
   // マップの表示制御用
   late GoogleMapController mapController;
 
@@ -27,6 +28,10 @@ class _MapViewState extends State<MapView> {
   void initState() {
     super.initState();
     if (widget.isRunning) {
+      _initialLocation = CameraPosition(
+        target: LatLng(widget.startPos.latitude, widget.startPos.longitude),
+        zoom: 14.0, // Set an appropriate zoom level
+      );
       _startLocationUpdates();
     }
   }
@@ -36,7 +41,7 @@ class _MapViewState extends State<MapView> {
     Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 15, // 10メートル移動ごとに更新
+        distanceFilter: 10, // 10メートル移動ごとに更新
       ),
     ).listen((Position position) {
       if (mounted) {
@@ -77,7 +82,7 @@ class _MapViewState extends State<MapView> {
         _totalDistance = 0.0;
       });
     }
-
+    ref.read(totalDistanceProvider.notifier).state = _totalDistance;
     debugPrint('移動距離: $_totalDistance');
   }
 
@@ -193,7 +198,7 @@ class _MapViewState extends State<MapView> {
                 padding: const EdgeInsets.all(10.0),
                 color: Colors.white.withOpacity(0.7),
                 child: Text(
-                  '移動距離: ${_totalDistance.toStringAsFixed(2)} m',
+                  '移動距離: ${ref.watch(totalDistanceProvider)} m',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
