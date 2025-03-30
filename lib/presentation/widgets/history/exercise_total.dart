@@ -1,12 +1,9 @@
-import 'package:ehho/core/services/activity_service.dart'; // パスは実際のプロジェクトに合わせてください
+import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final totalDistanceProvider = FutureProvider<int>(
-  (ref) async {
-    final activityService = ref.watch(activityServiceProvider);
-    return await activityService.getDistanceTotal();
-  },
+  (ref) async => await ref.watch(activityServiceProvider).getDistanceTotal(),
 );
 
 class ExerciseTotal extends ConsumerWidget {
@@ -14,7 +11,6 @@ class ExerciseTotal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final asyncTotalDistance = ref.watch(totalDistanceProvider);
 
     const TextStyle labelStyle = TextStyle(fontSize: 20, color: Colors.black);
@@ -39,7 +35,7 @@ class ExerciseTotal extends ConsumerWidget {
             children: [
               Container(
                 width: 270,
-                decoration: const BoxDecoration( 
+                decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
                       color: Color.fromARGB(50, 0, 0, 0),
@@ -49,11 +45,11 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline, 
-                  textBaseline: TextBaseline.alphabetic,       
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Text('累計', style: labelStyle), 
-                    const Spacer(), 
+                    const Text('累計', style: labelStyle),
+                    const Spacer(),
                     switch (asyncTotalDistance) {
                       AsyncLoading() => const SizedBox(
                         child: Text(
@@ -62,24 +58,24 @@ class ExerciseTotal extends ConsumerWidget {
                           textAlign: TextAlign.right,
                         ),
                       ),
-                      AsyncError(:final error) => SizedBox( 
-                        child: Tooltip( 
+                      AsyncError(:final error) => SizedBox(
+                        child: Tooltip(
                           message: error.toString(),
                           child: Text(
-                            '読み込めませんでした...', 
-                            style: distanceStyle.copyWith(color: Colors.red), 
+                            '読み込めませんでした...',
+                            style: distanceStyle,
                             textAlign: TextAlign.right,
                           ),
                         ),
                       ),
                       AsyncData(:final value) => SizedBox(
                         child: Text(
-                          '$value km', 
+                          '$value km',
                           style: distanceStyle,
                           textAlign: TextAlign.right,
                         ),
                       ),
-                       _ => const SizedBox.shrink(), 
+                      _ => const SizedBox.shrink(),
                     },
                   ],
                 ),
