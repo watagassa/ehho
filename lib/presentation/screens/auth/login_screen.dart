@@ -82,14 +82,14 @@ class LoginScreen extends ConsumerWidget {
                       children: [
                         Image.asset(
                           'assets/images/google_icon.png',
-                          width: 32,
-                          height: 32,
+                          width: 30,
+                          height: 30,
                         ),
                         const SizedBox(width: 10),
                         Text(
                           "Googleでログイン",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
