@@ -66,7 +66,7 @@ class ActivityService {
           .from('user_activity')
           .select()
           .eq('user_id', userId);
-      data.sort((a, b) => a['activity_id'].compareTo(b['activity_id']));
+      data.sort((a, b) => b['activity_id'].compareTo(a['activity_id']));
       return ActivityGet.listInit(data);
     } catch (e) {
       throw ('アクティビティリスト取得中にエラーが発生しました。$e');
