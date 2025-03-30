@@ -1,11 +1,18 @@
+import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final totalDistance = FutureProvider<int>(
+  (ref) async => ref.watch(activityServiceProvider).getDistanceTotal(),
+);
 
 class ExerciseTotal extends ConsumerWidget {
   const ExerciseTotal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final watcher = ref.watch(totalDistance);
+
     const TextStyle labelStyle = TextStyle(fontSize: 20, color: Colors.black);
     const TextStyle distanceStyle = TextStyle(
       fontSize: 18,
@@ -39,12 +46,38 @@ class ExerciseTotal extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   textBaseline: TextBaseline.alphabetic,
-                  children: const [
+                  children: [
                     Text('累計', style: labelStyle),
+                    switch (watcher) {
+                      AsyncLoading() => SizedBox(
+                        width: 220,
+                        child: Text(
+                          'Loading...',
+                          style: distanceStyle,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      AsyncError() => SizedBox(
+                        width: 220,
+                        child: Text(
+                          '読み込めませんでした。',
+                          style: distanceStyle,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      AsyncValue<int>() => SizedBox(
+                        width: 220,
+                        child: Text(
+                          '$totalDistance km',
+                          style: distanceStyle,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    },
                     SizedBox(
                       width: 220,
                       child: Text(
-                        '2000 km',
+                        '$totalDistance km',
                         style: distanceStyle,
                         textAlign: TextAlign.right,
                       ),
