@@ -1,4 +1,6 @@
 import 'package:ehho/core/services/auth_service.dart';
+import 'package:ehho/core/services/map/gps_allow.dart';
+import 'package:ehho/presentation/widgets/gpsAllow_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,19 +91,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             SizedBox(height: 20),
             // gpsの許可チェックボックス
             Text("3.gpsの許可はする？"),
-            Row(
-              children: [
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value!; // チェックボックスに渡す値を更新する
-                    });
-                  },
-                ),
-                Text("gpsの許可"),
-              ],
-            ),
+            GpsallowButton(),
             SizedBox(height: 20),
             // 通知の許可トグルスイッチ
             Text("4.通知の許可はする？"),

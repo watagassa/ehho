@@ -1,9 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
-/// デバイスの現在位置を決定する。
-/// 位置情報サービスが有効でない場合、または許可されていない場合。
-/// エラーを返します
-Future<Position> _determinePosition() async {
+// _determinePosition関数の実行
+Future<bool> gpsAllow() async {
   bool serviceEnabled;
   LocationPermission permission;
 
@@ -11,8 +9,6 @@ Future<Position> _determinePosition() async {
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     // 位置情報サービスが有効でない場合、続行できません。
-    // 位置情報にアクセスし、ユーザーに対して 
-    // 位置情報サービスを有効にするようアプリに要請する。
     return Future.error('Location services are disabled.');
   }
 
@@ -25,14 +21,14 @@ Future<Position> _determinePosition() async {
       return Future.error('Location permissions are denied');
     }
   }
-  
+
   // 永久に拒否されている場合のエラーを返す
   if (permission == LocationPermission.deniedForever) {
     return Future.error(
-      'Location permissions are permanently denied, we cannot request permissions.');
-  } 
+      'Location permissions are permanently denied, we cannot request permissions.',
+    );
+  }
 
-  // ここまでたどり着くと、位置情報に対しての権限が許可されているということなので
-  // デバイスの位置情報を返す。
-  return await Geolocator.getCurrentPosition();
+  // 位置情報に対しての権限が許可されている場合、デバイスの位置情報を返す
+  return true;
 }
