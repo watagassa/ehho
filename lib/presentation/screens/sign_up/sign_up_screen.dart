@@ -1,18 +1,26 @@
+import 'package:ehho/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/cupertino.dart';
 // import 'signup_view_model.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   // final _viewModel = SignUpViewModel();
   bool isChecked = false; // valueプロパティに渡す変数
   bool isToggle = false;
+
+  String name = "";
+  double height = 0;
+  double weight = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +52,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // controller: _viewModel.nameController,
               maxLength: 20,
               decoration: InputDecoration(labelText: '名前'),
+              onChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
             ),
             SizedBox(height: 20),
             Text("2.ｴｯﾎｴｯﾎ 身長・体重を入力しなきゃ"),
@@ -54,6 +67,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d*)?')),
               ],
+              onChanged: (value) {
+                setState(() {
+                  height = double.parse(value);
+                });
+              },
             ),
             TextField(
               // controller: _viewModel.weightController,
@@ -62,6 +80,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+(\.\d*)?')),
               ],
+              onChanged: (value) {
+                setState(() {
+                  weight = double.parse(value);
+                });
+              },
             ),
             SizedBox(height: 20),
             // gpsの許可チェックボックス
@@ -100,9 +123,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(height: 20),
             SizedBox(
               child: ElevatedButton(
-                onPressed: () {
-                  //home画面に移動
-                  context.go("/home");
+                onPressed: () async {
+                  await ref
+                      .read(authServiceProvider)
+                      .registerUser(name: name, height: height, weight: weight);
+                  if (context.mounted) {
+                    //home画面に移動
+                    context.go("/home");
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(800, 50),

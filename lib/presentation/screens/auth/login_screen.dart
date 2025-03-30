@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ehho/core/services/login/login_sevice.dart';
+import 'package:ehho/core/services/auth_service.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -49,7 +50,9 @@ class LoginScreen extends ConsumerWidget {
                     throw ('Googleログインに失敗しました: $e');
                   }
                   if (context.mounted) {
-                    // ログイン処理が終わり次第signInに遷移
+                    final isRegistered = await ref.read(authServiceProvider).isRegistered();
+                    // if(!isRegistered) context.go("/signIn");
+                    // else context.go("/home");
                     context.go("/signIn");
                   }
                 },
