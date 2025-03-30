@@ -58,9 +58,8 @@ class ExerciseTotal extends ConsumerWidget {
                           textAlign: TextAlign.right,
                         ),
                       ),
-                      AsyncError(:final error) => SizedBox(
+                      AsyncError() => SizedBox(
                         child: Tooltip(
-                          message: error.toString(),
                           child: Text(
                             '読み込めませんでした...',
                             style: distanceStyle,
@@ -83,22 +82,108 @@ class ExerciseTotal extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text(
-                '愛知県から京都府\nくらいの距離 !',
-                style: comparisonStyle,
-                textAlign: TextAlign.left,
-              ),
-              Image.asset(
-                "assets/images/ehho_nomal.png",
-                width: 75,
-                height: 75,
-                fit: BoxFit.contain,
-              ),
-            ],
-          ),
+
+          switch (asyncTotalDistance) {
+            AsyncLoading() => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text(
+                  'Loading...',
+                  style: comparisonStyle,
+                  textAlign: TextAlign.left,
+                ),
+                Image.asset(
+                  "assets/images/ehho_nomal.png",
+                  width: 75,
+                  height: 75,
+                  fit: BoxFit.contain,
+                ),
+              ],
+            ),
+            AsyncError() => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text(
+                  '読み込めませんでした...',
+                  style: comparisonStyle,
+                  textAlign: TextAlign.left,
+                ),
+                Image.asset(
+                  "assets/images/ehho_nomal.png",
+                  width: 75,
+                  height: 75,
+                  fit: BoxFit.contain,
+                ),
+              ],
+            ),
+            AsyncData(:final value) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                if (value < 5) ...[
+                  const Text(
+                    'ｴｯﾎｴｯﾎ\n一緒に頑張らなきゃ',
+                    style: comparisonStyle,
+                    textAlign: TextAlign.left,
+                  ),
+                  Image.asset(
+                    "assets/images/ehho_nomal.png",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                ] else if (value < 10) ...[
+                  const Text(
+                    'ｴｯﾎｴｯﾎ\n楽しくなってきた',
+                    style: comparisonStyle,
+                    textAlign: TextAlign.left,
+                  ),
+                  Image.asset(
+                    "assets/images/ehho_walking.png",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                ] else if (value < 50) ...[
+                  const Text(
+                    'ｴｯﾎｴｯﾎ\nこの調子、この調子',
+                    style: comparisonStyle,
+                    textAlign: TextAlign.left,
+                  ),
+                  Image.asset(
+                    "assets/images/ehho_nekketu.png",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                ] else if (value < 100) ...[
+                  const Text(
+                    'ｴｯﾎｴｯﾎ\n運動しなきゃ',
+                    style: comparisonStyle,
+                    textAlign: TextAlign.left,
+                  ),
+                  Image.asset(
+                    "assets/images/ehho_fire.png",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                ] else ...[
+                  const Text(
+                    'ｴｯﾎｴｯﾎ\n渡り鳥にも負けない',
+                    style: comparisonStyle,
+                    textAlign: TextAlign.left,
+                  ),
+                  Image.asset(
+                    "assets/images/ehho_cosmic.png",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ],
+            ),
+            _ => const SizedBox.shrink(),
+          },
         ],
       ),
     );
