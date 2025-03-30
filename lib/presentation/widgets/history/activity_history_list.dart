@@ -1,122 +1,101 @@
+import 'package:ehho/core/models/activity.dart';
+import 'package:ehho/core/utils/generate_history.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // DateFormatを使用するためにインポート
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:ehho/core/services/activity_service.dart';
 
-// アクティビティのデータを格納するクラス
-class Activity {
-  final String distance;
-  final String time;
-  final DateTime dateTime;
-  final String imagePath; // 画像パスを追加
-
-  Activity({
-    required this.distance,
-    required this.time,
-    required this.dateTime,
-    required this.imagePath, // 画像パスもコンストラクタで受け取る
-  });
-}
-
-class ActivityHistoryList extends StatelessWidget {
+class ActivityHistoryList extends ConsumerWidget {
   const ActivityHistoryList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // アクティビティデータのリスト
-    final List<Activity> activities = [
-      Activity(
-        distance: "0.5km",
-        time: "00:05:00",
-        dateTime: DateTime(2025, 3, 25, 9, 30), // 日付と時間を指定
-        imagePath: 'assets/images/ehho_walking.png',
-      ),
-      Activity(
-        distance: "2.0km",
-        time: "00:25:00",
-        dateTime: DateTime(2025, 3, 26, 10, 45),
-        imagePath: 'assets/images/ehho_running.png',
-      ),
-      Activity(
-        distance: "1.5km",
-        time: "00:18:00",
-        dateTime: DateTime(2025, 3, 27, 8, 15),
-        imagePath: 'assets/images/ehho_cycling.png',
-      ),
-      // 他のアクティビティデータを追加
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activityService = ref.read(activityServiceProvider);
 
     return SizedBox(
-      height: 300, // 最大高さを設定（調整可能）
-      child: Scrollbar(
-        // スクロールバー表示（オプション）
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 400, // スクロール可能な最大高さ
-            ),
-            child: ListView.separated(
-              shrinkWrap: true, // 内部でスクロールを管理
-              physics: const AlwaysScrollableScrollPhysics(), // 必ずスクロール可能にする
-              itemCount: activities.length, // データ数で管理
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                final activity = activities[index];
-                final formattedDate = DateFormat(
-                  'yyyy-MM-dd HH:mm',
-                ).format(activity.dateTime); // 日時をフォーマット
+      height: 300,
+      child: FutureBuilder<List<ActivityGet>>(
+        future: activityService.getActivity(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
+          }
+          final activities = snapshot.data ?? [];
+          if (activities.isEmpty) {
+            return const Center(child: Text('アクティビティがありません'));
+          }
 
-                // 時間帯による条件分岐
-                String timeOfDayStatus;
-                IconData icon;
-                timeOfDayStatus = formattedDate;
-                if (activity.dateTime.hour >= 6 && activity.dateTime.hour < 9) {
-                  // 朝
-                  icon = Icons.wb_sunny;
-                } else if (activity.dateTime.hour >= 9 &&
-                    activity.dateTime.hour < 18) {
-                  // 昼
-                  icon = Icons.access_time;
-                } else {
-                  // 夜
-                  icon = Icons.nights_stay;
-                }
+          return Scrollbar(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemCount: activities.length,
+                  itemBuilder: (context, index) {
+                    final activity = activities[index];
+                    DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+                    DateTime formattedDateTime = dateFormat.parse(activity.day);
 
-                return ListTile(
-                  leading: Image.asset(
-                    activity.imagePath, // 各アクティビティの画像を表示
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.contain,
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    IconData icon;
+                    if (formattedDateTime.hour >= 6 &&
+                        formattedDateTime.hour < 9) {
+                      icon = Icons.wb_sunny;
+                    } else if (formattedDateTime.hour >= 9 &&
+                        formattedDateTime.hour < 18) {
+                      icon = Icons.access_time;
+                    } else {
+                      icon = Icons.nights_stay;
+                    }
+
+                    String imagePath = generateImagePath(activity.activity);
+
+                    return ListTile(
+                      leading: Image.asset(
+                        imagePath,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.contain,
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            activity.distance,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                activity.distance.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                formatDuration(activity.time),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            activity.time,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          Column(children: [Icon(icon), Text(activity.day)]),
                         ],
                       ),
-                      Column(children: [Icon(icon), Text(timeOfDayStatus)]),
-                    ],
-                  ),
-                  onTap: () {
-                    // 詳細画面へ遷移（今は未実装）
+                      onTap: () {
+                        // 詳細画面へ遷移（未実装）
+                      },
+                    );
                   },
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
