@@ -81,28 +81,33 @@ class AchievementRow extends StatelessWidget {
         child: Row(
           children: [
             AchievementCard(
-              title: "ここにタイトル",
+              title: "ヒナ\nフクロウ",
               imagePath: "assets/images/ehho_nomal.png",
               progress: 0.4,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_running.png",
+              title: "健康\nフクロウ",
+              imagePath: "assets/images/ehho_walking.png",
               progress: 0.6,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_cycling.png",
+              title: "熱血\nフクロウ",
+              imagePath: "assets/images/ehho_nekketu.png",
               progress: 0.8,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_nomal.png",
+              title: "覇気\nフクロウ",
+              imagePath: "assets/images/ehho_fire.png",
               progress: 0.4,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_nomal.png",
+              title: "渡鳥\nフクロウ",
+              imagePath: "assets/images/ehho_earth.png",
+              progress: 0.4,
+            ),
+            AchievementCard(
+              title: "宇宙\nフクロウ",
+              imagePath: "assets/images/ehho_cosmic.png",
               progress: 0.4,
             ),
           ],
