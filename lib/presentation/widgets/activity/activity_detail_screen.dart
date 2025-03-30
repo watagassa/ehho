@@ -1,11 +1,13 @@
 import 'package:ehho/core/services/map/googlemap_service.dart';
+import 'package:ehho/core/services/map/gps_allow.dart';
+import 'package:ehho/core/services/map/position.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ehho/presentation/widgets/activity/dashboard.dart';
 import 'package:ehho/presentation/widgets/activity/activity_custombutton_group.dart';
 import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
@@ -25,6 +27,20 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   // メッツの値
   final List<double> mets = [9.0, 3.5, 6.0];
 
+  // 初期地点の場所
+  // 仮の初期値でPositionを作成
+  Position startPos = Position(
+    latitude: 0.0, // 適当な緯度
+    longitude: 0.0, // 適当な経度
+    accuracy: 0.0,
+    altitude: 0.0,
+    altitudeAccuracy: 0.0,
+    heading: 0.0,
+    headingAccuracy: 0.0, // 追加
+    speed: 0.0,
+    speedAccuracy: 0.0,
+    timestamp: DateTime.now(),
+  );
   //スタートストップ
   void _toggleActivity() async {
     if (_isRunning) {
@@ -33,22 +49,28 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
 
       //supabaseにアクティビティを登録
       try {
-        await ref.read(activityServiceProvider).insertActivity(
-          activity: selectedMode,
-          distance: _distance,
-          time: _seconds,
-        );
+        await ref
+            .read(activityServiceProvider)
+            .insertActivity(
+              activity: selectedMode,
+              distance: _distance,
+              time: _seconds,
+            );
         print("アクティビティが正常に登録されました");
       } catch (e) {
         print("エラー: $e");
       }
-
     } else {
       // **開始する前にリセット**
       setState(() {
         _seconds = 0;
         _distance = 0.0;
       });
+      // 初期位置を入れる
+      Position? tmpPos = await getCurrentLoc();
+      if (tmpPos != null) {
+        startPos = tmpPos;
+      }
 
       // タイマー開始
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -85,67 +107,93 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    gpsAllow();
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            // 運動時間
-            MetricContainer(
-              child: Column(
-                children: [
-                  Text(
-                    "${(_seconds ~/ 3600).toString().padLeft(2, '0')}:${((_seconds % 3600) ~/ 60).toString().padLeft(2, '0')}:${(_seconds % 60).toString().padLeft(2, '0')}",
-                    style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text("運動時間", style: TextStyle(fontSize: 16, color: Colors.black54)),
-                ],
-              ),
-            ),
-            
-            // 距離、カロリー、ペース
-            MetricContainer(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MetricItem(value: _distance.toStringAsFixed(2), label: "距離 [km]"),
-                  MetricItem(value: _calculateCalories().toStringAsFixed(1), label: "カロリー [kcal]"),
-                  MetricItem(value: _calculatePace(), label: "平均ペース [min/km]"),
-                ],
-              ),
-            ),
-
-            // GoogleMap
-            MapView(),
-            SizedBox(height: 10),
-
-            // モードカスタムボタン
-            ModeButtonGroup(onModeChange: (index) {
-              setState(() {
-                selectedMode = index;
-              });
-            }),
-
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 300,
-              child: ElevatedButton(
-                onPressed: _toggleActivity,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isRunning
-                      ? Color.fromARGB(255, 200, 110, 100) // ストップ時は赤
-                      : const Color.fromARGB(255, 238, 229, 153), // 開始時は黄色
-                  foregroundColor: Colors.black54,
-                  padding: const EdgeInsets.all(5.0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(
+            children: [
+              // 運動時間
+              MetricContainer(
+                child: Column(
+                  children: [
+                    Text(
+                      "${(_seconds ~/ 3600).toString().padLeft(2, '0')}:${((_seconds % 3600) ~/ 60).toString().padLeft(2, '0')}:${(_seconds % 60).toString().padLeft(2, '0')}",
+                      style: const TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "運動時間",
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                    ),
+                  ],
                 ),
-                child: Text(_isRunning ? "ストップ" : "新しいアクティビティを開始"),
               ),
-            ),
 
-            const Expanded(child: SizedBox()),
-          ],
+              // 距離、カロリー、ペース
+              MetricContainer(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MetricItem(
+                      value: _distance.toStringAsFixed(2),
+                      label: "距離 [km]",
+                    ),
+                    MetricItem(
+                      value: _calculateCalories().toStringAsFixed(1),
+                      label: "カロリー [kcal]",
+                    ),
+                    MetricItem(
+                      value: _calculatePace(),
+                      label: "平均ペース [min/km]",
+                    ),
+                  ],
+                ),
+              ),
+
+              // GoogleMapの表示を_isRunningがtrueのときのみ
+              if (_isRunning) MapView(isRunning: _isRunning),
+              SizedBox(height: 10),
+
+              // モードカスタムボタン
+              ModeButtonGroup(
+                onModeChange: (index) {
+                  setState(() {
+                    selectedMode = index;
+                  });
+                },
+              ),
+
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: _toggleActivity,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _isRunning
+                            ? Color.fromARGB(255, 200, 110, 100) // ストップ時は赤
+                            : const Color.fromARGB(
+                              255,
+                              238,
+                              229,
+                              153,
+                            ), // 開始時は黄色
+                    foregroundColor: Colors.black54,
+                    padding: const EdgeInsets.all(5.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(_isRunning ? "ストップ" : "新しいアクティビティを開始"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
