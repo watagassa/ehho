@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ehho/presentation/widgets/activity/dashboard.dart';
 import 'package:ehho/presentation/widgets/activity/activity_custombutton_group.dart';
+import 'package:ehho/core/services/activity_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ActivityScreen extends StatefulWidget {
+class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
 
   @override
-  State<ActivityScreen> createState() => _ActivityScreenState();
+  ConsumerState<ActivityScreen> createState() => _ActivityScreenState();
 }
 
-class _ActivityScreenState extends State<ActivityScreen> {
+class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   Timer? _timer;
   int _seconds = 0;
   double _distance = 0.1; // 初期値 (km)
@@ -24,10 +26,23 @@ class _ActivityScreenState extends State<ActivityScreen> {
   final List<double> mets = [9.0, 3.5, 6.0];
 
   //スタートストップ
-  void _toggleActivity() {
+  void _toggleActivity() async {
     if (_isRunning) {
       // 停止する場合
       _timer?.cancel();
+
+      //supabaseにアクティビティを登録
+      try {
+        await ref.read(activityServiceProvider).insertActivity(
+          activity: selectedMode,
+          distance: _distance,
+          time: _seconds,
+        );
+        print("アクティビティが正常に登録されました");
+      } catch (e) {
+        print("エラー: $e");
+      }
+
     } else {
       // **開始する前にリセット**
       setState(() {
