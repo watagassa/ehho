@@ -103,14 +103,16 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
 
   double _calculateCalories() {
     double metsValue = mets[selectedMode];
-    return metsValue * weight / mets[0] * 1.05 * _distance / 1000;
+    return metsValue * weight / mets[0] * 1.05 * (_distance / 1000);
   }
 
   String _calculatePace() {
-    if (_distance == 0) return "00:00";
-    double pace = _seconds / 60 / _distance;
+    print("うつらないいいい$_distance,$_seconds");
+    if (_distance == 0.0) return "00:00";
+    double pace = _seconds / 60.0 / (_distance / 1000);
     int minutes = pace.floor();
     int seconds = ((pace - minutes) * 60).floor();
+    print("計算$pace,$minutes,$seconds");
     return "$minutes:${seconds.toString().padLeft(2, '0')}";
   }
 
