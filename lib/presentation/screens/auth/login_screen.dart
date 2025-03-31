@@ -16,39 +16,53 @@ class LoginScreen extends ConsumerWidget {
           // 背景画像
           Positioned.fill(
             child: Image.asset(
-              'assets/images/background_login.png',
-              fit: BoxFit.fitWidth,
+              'assets/images/shibahu_login.png',
+              fit: BoxFit.fill,
               alignment: Alignment.topCenter,
             ),
           ),
 
           // フクロウ（上に配置）
           Positioned(
-            top: 250, // 上からの距離を調整
+            top: 400, // 上からの距離を調整
+            left: 100,
             child: AnimatedOwl(),
           ),
-
+    
+          Positioned(
+            top: 150,
+            right: 50,
+            child: Image.asset(
+              "assets/images/ehho.png"
+            )
+          ),
+          Positioned(
+            top: 310,
+            right: 220,
+            child: Text("エッホエッホ",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            )
+          ),
+          Positioned(
+            top: 340,
+            right: 20,
+            child: Text("ログインしないってと伝えなきゃ",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            )
+          ),
+          Positioned(
+            top: 370,
+            right: 220,
+            child: Text("エッホエッホ",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            )
+          ),
           // ログインUI（中央に配置）
           Align(
             alignment: Alignment.bottomCenter,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  "ｴｯﾎｴｯﾎ",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-                ),
-                Text(
-                  "ここからログインできるって伝えなきゃ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                ),
-                Text(
-                  "ｴｯﾎｴｯﾎ",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-                ),
-
-                const SizedBox(height: 10),
-
                 // Googleログインボタン
                 SizedBox(
                   width: 300,
@@ -97,7 +111,7 @@ class LoginScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 130),
+                const SizedBox(height: 100),
               ],
             ),
           ),
