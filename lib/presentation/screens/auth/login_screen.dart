@@ -23,11 +23,11 @@ class LoginScreen extends ConsumerWidget {
             right: 0,
             height: screenHeight * 0.7,
             child: Image.asset(
-              'assets/images/background_login.png',
-              fit: BoxFit.cover,
+              'assets/images/shibahu_login.png',
+              fit: BoxFit.fill,
+              alignment: Alignment.topCenter,
             ),
           ),
-
           // フクロウ（画面の20%の高さの位置に）
           Positioned(
             top: screenHeight * 0.3,

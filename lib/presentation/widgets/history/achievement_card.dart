@@ -114,12 +114,12 @@ class AchievementRow extends ConsumerWidget {
               progress: totalDistance < 100 ? totalDistance / 100 : 1,
             ),
             AchievementCard(
-              title: "渡鳥\nフクロウ",
+              title: "世界\nフクロウ",
               imagePath: "assets/images/ehho_earth.png",
               progress: totalDistance < 500 ? totalDistance / 500 : 1,
             ),
             AchievementCard(
-              title: "宇宙\nフクロウ",
+              title: "星\nフクロウ",
               imagePath: "assets/images/ehho_cosmic.png",
               progress: totalDistance < 1000 ? totalDistance / 1000 : 1,
             ),
