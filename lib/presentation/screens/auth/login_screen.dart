@@ -21,17 +21,17 @@ class LoginScreen extends ConsumerWidget {
             top: 0,
             left: 0,
             right: 0,
-            height: screenHeight * 0.7,
+            height: screenHeight * 0.75,
             child: Image.asset(
-              'assets/images/shibahu_login.png',
+              'assets/images/background_login.png',
               fit: BoxFit.fill,
               alignment: Alignment.topCenter,
             ),
           ),
           // フクロウ（画面の20%の高さの位置に）
           Positioned(
-            top: screenHeight * 0.3,
-            left: (screenWidth - 200) / 4, // 左配置
+            top: screenHeight * 0.5,
+            left: (screenWidth - 100) / 4, // 左配置
             child: AnimatedOwl(),
           ),
 
@@ -44,18 +44,11 @@ class LoginScreen extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "ｴｯﾎｴｯﾎ",
-                    style: TextStyle(fontSize: screenWidth * 0.04),
+                    "エッホエッホ\nログインしなきゃって伝えなきゃ\nエッホエッホ",
+                    style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "ここからログインできるって伝えなきゃ",
-                    style: TextStyle(fontSize: screenWidth * 0.045),
-                  ),
-                  Text(
-                    "ｴｯﾎｴｯﾎ",
-                    style: TextStyle(fontSize: screenWidth * 0.04),
-                  ),
-                  const SizedBox(height: 10),
+                  
+                  const SizedBox(height: 270),
 
                   // Googleログインボタン
                   SizedBox(
