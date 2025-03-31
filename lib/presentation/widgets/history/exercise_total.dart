@@ -92,7 +92,7 @@ class ExerciseTotal extends ConsumerWidget {
             children: [
               if (value < 5) ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\n一緒に頑張らなきゃ',
+                  'エッホエッホ\n一緒に頑張らなきゃ',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -116,7 +116,7 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
               ] else if (value < 50) ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\nこの調子、この調子',
+                  'エッホエッホ\nこの調子♩この調子♩',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -128,7 +128,7 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
               ] else if (value < 100) ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\n今日も運動しなきゃ',
+                  'エッホエッホ\n今日も運動しなきゃ',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -140,7 +140,7 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
               ] else if (value < 500) ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\n渡り鳥にも負けない',
+                  'エッホエッホ\n渡り鳥にも負けない',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -152,7 +152,7 @@ class ExerciseTotal extends ConsumerWidget {
                 ),
               ] else ...[
                 const Text(
-                  'ｴｯﾎｴｯﾎ\nまだ見ぬ場所へ',
+                  'エッホエッホ\nまだ見ぬ場所へ',
                   style: comparisonStyle,
                   textAlign: TextAlign.left,
                 ),
@@ -193,7 +193,7 @@ class ExerciseTotal extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        const Text('累計', style: labelStyle),
+                        const Text('TOTAL', style: labelStyle),
                         const Spacer(),
                         distanceContent,
                       ],
