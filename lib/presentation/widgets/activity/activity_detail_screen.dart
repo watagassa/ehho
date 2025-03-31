@@ -107,12 +107,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   }
 
   String _calculatePace() {
-    print("うつらないいいい$_distance,$_seconds");
     if (_distance == 0.0) return "00:00";
     double pace = _seconds / 60.0 / (_distance / 1000);
     int minutes = pace.floor();
     int seconds = ((pace - minutes) * 60).floor();
-    print("計算$pace,$minutes,$seconds");
     return "$minutes:${seconds.toString().padLeft(2, '0')}";
   }
 
