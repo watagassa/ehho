@@ -49,6 +49,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -68,3 +69,13 @@ flutter:
     - .env # envファイルを読み込むための設定
 
   uses-material-design: true
+
+flutter_icons: 
+  image_path_android: assets/icons/ehho_appicon.png
+  adaptive_icon_background: '#000000' #iconの背景色
+  adaptive_icon_foreground: assets/icons/ehho_appicon.png
+  image_path_ios: assets/icons/ehho_appicon.png
+  android: true
+  adaptive_icon_padding: true
+  min_sdk_android: 30 #Androidの最小SDKバージョン
+  ios: true   
