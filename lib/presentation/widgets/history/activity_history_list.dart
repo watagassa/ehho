@@ -31,7 +31,7 @@ class ActivityHistoryList extends ConsumerWidget {
           return Scrollbar(
             child: SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 400),
+                constraints: const BoxConstraints(maxHeight: 300),
                 child: ListView.separated(
                   shrinkWrap: true,
                   physics: const AlwaysScrollableScrollPhysics(),
