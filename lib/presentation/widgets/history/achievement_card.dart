@@ -1,4 +1,6 @@
+import 'package:ehho/core/services/activity_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AchievementCard extends StatelessWidget {
   final String title;
@@ -20,6 +22,10 @@ class AchievementCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
+        color:
+            progress == 1
+                ? const Color.fromARGB(66, 80, 80, 80)
+                : Colors.transparent,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -69,45 +75,78 @@ class MileageBar extends StatelessWidget {
 }
 
 // 横スクロールでカードを並べるウィジェット
-class AchievementRow extends StatelessWidget {
+class AchievementRow extends ConsumerWidget {
   const AchievementRow({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150, // カードの高さに合わせる
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activityService = ref.watch(activityServiceProvider);
+
+    return FutureBuilder<int>(
+      future: activityService.getDistanceTotal(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          final totalDistance = snapshot.data!;
+
+          List<AchievementCard> achievementCards = [
             AchievementCard(
-              title: "ここにタイトル",
+              title: "ヒナ\nフクロウ",
               imagePath: "assets/images/ehho_nomal.png",
-              progress: 0.4,
+              progress: totalDistance < 5 ? totalDistance / 5 : 1,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_running.png",
-              progress: 0.6,
+              title: "健康\nフクロウ",
+              imagePath: "assets/images/ehho_walking.png",
+              progress: totalDistance < 10 ? totalDistance / 10 : 1,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_cycling.png",
-              progress: 0.8,
+              title: "熱血\nフクロウ",
+              imagePath: "assets/images/ehho_nekketu.png",
+              progress: totalDistance < 50 ? totalDistance / 50 : 1,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_nomal.png",
-              progress: 0.4,
+              title: "覇気\nフクロウ",
+              imagePath: "assets/images/ehho_fire.png",
+              progress: totalDistance < 100 ? totalDistance / 100 : 1,
             ),
             AchievementCard(
-              title: "ここにタイトル",
-              imagePath: "assets/images/ehho_nomal.png",
-              progress: 0.4,
+              title: "渡鳥\nフクロウ",
+              imagePath: "assets/images/ehho_earth.png",
+              progress: totalDistance < 500 ? totalDistance / 500 : 1,
             ),
-          ],
-        ),
-      ),
+            AchievementCard(
+              title: "宇宙\nフクロウ",
+              imagePath: "assets/images/ehho_cosmic.png",
+              progress: totalDistance < 1000 ? totalDistance / 1000 : 1,
+            ),
+          ];
+
+          List<AchievementCard> achieved = [];
+          List<AchievementCard> notAchieved = [];
+
+          for (var card in achievementCards) {
+            if (card.progress == 1) {
+              achieved.add(card);
+            } else {
+              notAchieved.add(card);
+            }
+          }
+
+          return SizedBox(
+            height: 150,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [...notAchieved, ...achieved]),
+            ),
+          );
+        } else {
+          return const Center(child: Text('No data'));
+        }
+      },
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ehho/core/services/user_service.dart';
 import 'package:ehho/presentation/widgets/activity/activity_detail_screen.dart';
 import 'package:ehho/presentation/widgets/history/history_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // インデックス
     final index = ref.watch(indexProvider); //refがプロバイダーの鍵
+    final userIconURL = ref.read(userServiceProvider).getUserIconURL();
 
     // アイテムたち
     const items = [
@@ -29,14 +31,15 @@ class HomeScreen extends ConsumerWidget {
     ];
 
     final header = AppBar(
-      leading: Padding(     //左側に画像読み込み
+      leading: Padding(
+        //左側に画像読み込み
         padding: EdgeInsets.all(1), // 左側の余白を追加
         child: Image.asset(
           'assets/images/ehho_nomal.png',
-          fit: BoxFit.contain,  //画像のサイズを調整
+          fit: BoxFit.contain, //画像のサイズを調整
         ),
       ),
-      leadingWidth: 100,  //画像配置の幅広げてる
+      leadingWidth: 100, //画像配置の幅広げてる
       title: FittedBox(
         child: Text(items[index].label ?? '', style: TextStyle(fontSize: 28)),
       ),
@@ -44,13 +47,15 @@ class HomeScreen extends ConsumerWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.all(7),
-          child: Image.asset('assets/images/default_user.png'),
+          child: CircleAvatar(
+            radius: 40.0,
+            backgroundImage: NetworkImage(userIconURL),
+          ),
         ),
       ],
 
-
       backgroundColor: Colors.lightGreen,
-      toolbarHeight:80,
+      toolbarHeight: 80,
     );
 
     // 下のバー
@@ -71,8 +76,8 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: header,
-      body: pages[index], 
-      bottomNavigationBar: bar
+      body: pages[index],
+      bottomNavigationBar: bar,
     );
   }
 }
